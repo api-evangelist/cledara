@@ -1,0 +1,42 @@
+aid: cledara
+url: >-
+  https://raw.githubusercontent.com/api-evangelist/cledara/refs/heads/main/apis.yml
+name: Cledara
+tags:
+  - SaaS Management
+  - Software Spending
+  - Finance
+type: Index
+image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+access: 3rd-Party
+created: '2026-03-16'
+modified: '2026-03-16'
+position: Consumer
+description: >-
+  Cledara is a SaaS management platform that helps companies manage, control,
+  and optimize their software spending. Cledara provides visibility into all
+  software subscriptions with built-in payment cards and approval workflows.
+apis:
+  - aid: cledara:cledara-api
+    name: Cledara API
+    tags:
+      - SaaS Management
+      - Finance
+    humanURL: https://docs.cledara.com/
+    properties:
+      - url: https://docs.cledara.com/
+        type: Documentation
+    description: >-
+      The Cledara API provides access to SaaS subscriptions, spending data,
+      and software management capabilities.
+common:
+  - type: Website
+    url: https://www.cledara.com/
+  - type: Documentation
+    url: https://docs.cledara.com/
+  - type: Privacy Policy
+    url: https://www.cledara.com/privacy-policy
+maintainers:
+  - FN: Kin Lane
+    email: kin@apievangelist.com
+specificationVersion: '0.19'
