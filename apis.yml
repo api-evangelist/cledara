@@ -3,9 +3,9 @@ url: >-
   https://raw.githubusercontent.com/api-evangelist/cledara/refs/heads/main/apis.yml
 name: Cledara
 tags:
+  - Finance
   - SaaS Management
   - Software Spending
-  - Finance
 type: Index
 image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
 access: 3rd-Party
@@ -20,8 +20,8 @@ apis:
   - aid: cledara:cledara-api
     name: Cledara API
     tags:
-      - SaaS Management
       - Finance
+      - SaaS Management
     humanURL: https://docs.cledara.com/
     properties:
       - url: https://docs.cledara.com/
