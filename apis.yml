@@ -60,6 +60,21 @@ common:
     url: https://www.cledara.com/terms-and-conditions
   - type: LinkedIn
     url: https://www.linkedin.com/company/cledara/
+  - type: Integrations
+    url: https://www.cledara.com/integrations
+integrations:
+  - name: Sign up now →
+  - name: Cledara
+  - name: G2
+  - name: Star
+  - name: Works with all tools
+  - name: chrome
+  - name: zafari
+  - name: edge
+  - name: firefox
+  - name: opera
+  - name: vivaldi
+  - name: Trivago
 maintainers:
   - FN: Kin Lane
     email: kinlane@gmail.com
