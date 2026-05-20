@@ -46,6 +46,8 @@ apis:
       and approval state changes. A sandbox environment is available
       for integration testing.
 common:
+  - type: GitHubOrganization
+    url: https://github.com/Cledara
   - type: Website
     url: https://www.cledara.com/
   - type: Documentation
