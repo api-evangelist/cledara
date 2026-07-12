@@ -1,0 +1,15 @@
+generated: '2026-07-11'
+method: searched
+probe: true
+source: https://www.cledara.com/security
+url: https://www.cledara.com/security
+certifications:
+- SOC 2
+- ISO 27001
+- GDPR
+evidence:
+- source: https://www.cledara.com/security
+  keywords:
+  - soc 2
+  - iso/iec 27001
+  - gdpr

@@ -46,6 +46,10 @@ apis:
       and approval state changes. A sandbox environment is available
       for integration testing.
 common:
+  - type: TrustCenter
+    url: security/cledara-trust-center.yml
+  - type: DomainSecurity
+    url: security/cledara-domain-security.yml
   - type: GitHubOrganization
     url: https://github.com/Cledara
   - type: Website
@@ -64,6 +68,8 @@ common:
     url: https://www.linkedin.com/company/cledara/
   - type: Integrations
     url: https://www.cledara.com/integrations
+  - url: https://www.cledara.com/blog
+    type: Blog
 integrations:
   - name: Sign up now →
   - name: Cledara
