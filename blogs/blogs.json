@@ -2,13 +2,20 @@
   "repo": "cledara",
   "feeds": [
     {
+      "source": "https://www.cledara.com/blog/rss.xml",
+      "feed_url": "https://www.cledara.com/blog/rss.xml",
+      "title": "",
+      "saved": 8,
+      "method": "feed"
+    },
+    {
       "source": "https://www.cledara.com/blog",
       "feed_url": "https://www.cledara.com/blog/rss.xml",
       "title": "",
-      "saved": 4,
+      "saved": 0,
       "method": "discovered"
     }
   ],
-  "fetched": "2026-07-11T11:50:51Z",
-  "post_count": 9
+  "fetched": "2026-08-01T15:49:00Z",
+  "post_count": 104
 }
