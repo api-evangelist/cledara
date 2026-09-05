@@ -1,0 +1,114 @@
+generated: '2026-09-05'
+method: derived
+source: >-
+  openapi/cledara-api-openapi.json (4xx responses on all 3 operations), enriched with a live
+  unauthenticated probe of https://api.cledara.com/v0/applications on 2026-09-05
+provider: Cledara
+providerId: cledara
+api: Cledara API
+format: vendor-json
+rfc9457: false
+content_type: application/json
+envelope:
+  shape: |
+    {
+      "message": "<human-readable message>",
+      "error": {
+        "method": "<HTTP method>",
+        "url": "<request path>",
+        "status": <HTTP status>,
+        "cledaraType": "cledaraError",
+        "errorId": <integer>
+      }
+    }
+  fields:
+    - name: message
+      type: string
+      description: Human-readable explanation of the failure.
+    - name: error.method
+      type: string
+      description: HTTP method of the failing request, echoed back.
+    - name: error.url
+      type: string
+      description: Request path of the failing request, echoed back.
+    - name: error.status
+      type: integer
+      description: HTTP status code, duplicated inside the body.
+    - name: error.cledaraType
+      type: string
+      description: Discriminator; observed value "cledaraError".
+    - name: error.errorId
+      type: integer
+      description: >-
+        Per-occurrence identifier. Useful as a support correlation id, but it is NOT
+        a stable error code — two identical failures return different errorId values,
+        so it cannot be branched on.
+  evidence:
+    probe: GET https://api.cledara.com/v0/applications (no Authorization header)
+    fetched: '2026-09-05'
+    http_status: 401
+    body: '{"message":"Missing or invalid Authorization header. Expected: Bearer <token>","error":{"method":"GET","url":"/v0/applications","status":401,"cledaraType":"cledaraError","errorId":29317748}}'
+  note: >-
+    The OpenAPI declares its 4xx responses with a description only and no response body
+    schema, so the envelope above is recorded from a live probe rather than from the
+    contract. An agent reading the spec alone cannot tell what an error body looks like.
+problem_types:
+  - status: 401
+    title: Missing or invalid API key
+    declared_on:
+      - GET /v0/applications
+      - GET /v0/transactions
+      - GET /v0/transactions/{transactionId}/invoice-url
+    causes:
+      - No Authorization header
+      - Malformed Authorization header (not "Bearer <token>")
+      - Unknown, revoked or deleted API key
+    remediation: >-
+      Mint a key in the Cledara web app under Settings → Profile Details → API Keys and
+      send it as "Authorization: Bearer <key>".
+    retryable: false
+  - status: 403
+    title: Insufficient privileges for this account
+    declared_on:
+      - GET /v0/applications
+      - GET /v0/transactions
+      - GET /v0/transactions/{transactionId}/invoice-url
+    causes:
+      - The user who created the key does not have access to the requested account or workspace
+    remediation: >-
+      An API key carries exactly the permissions of the user who created it. Have the key
+      recreated by a user with the required role rather than retrying.
+    retryable: false
+  - status: 404
+    title: Record not found
+    declared_on:
+      - GET /v0/transactions/{transactionId}/invoice-url
+    causes:
+      - transactionId does not exist
+      - transaction exists but has no invoice attached (see Transaction.hasInvoice)
+    remediation: >-
+      Check Transaction.hasInvoice from GET /v0/transactions before requesting an invoice URL.
+    retryable: false
+  - status: 429
+    title: Too many requests
+    declared_on:
+      - GET /v0/applications
+      - GET /v0/transactions
+      - GET /v0/transactions/{transactionId}/invoice-url
+    causes:
+      - More than 120 requests in a minute on one API key
+    remediation: >-
+      Wait the number of seconds in the Retry-After response header, then retry. Pace against
+      X-RateLimit-Remaining and X-RateLimit-Reset on every 2xx response.
+    response_headers:
+      - Retry-After
+      - X-RateLimit-Remaining
+    retryable: true
+gaps:
+  - No machine-readable error code vocabulary — errorId is per-occurrence, not a code.
+  - No 5xx responses are declared on any operation.
+  - No response body schema is attached to any 4xx response in the spec.
+  - No RFC 9457 application/problem+json representation.
+maintainers:
+  - FN: Kin Lane
+    email: kinlane@gmail.com

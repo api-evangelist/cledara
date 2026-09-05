@@ -4,142 +4,155 @@ schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main
 provider: Cledara
 providerId: cledara
 created: '2026-05-04'
-# Provenance stamped 2026-08-11: this artifact was written by the API Evangelist
-# bulk sweep dated 2026-05-04, not harvested from the provider. See roadmap#35.
-method: generated
-modified: '2026-05-04'
-tags:
-  - Finance
-  - SaaS Management
-  - Software Spending
-  - Spend Management
-  - Subscription Management
-  - Virtual Cards
-description: Machine-readable plans and pricing scaffold for this API provider. Conforms to the API Commons
-  Plans schema. Tier limits and prices are scaffold defaults; replace with provider-published values.
+modified: '2026-09-05'
+generated: '2026-09-05'
+method: searched
+source: https://www.cledara.com/pricing
+note: >-
+  Replaces the 2026-05-04 scaffold, whose Free/Professional/Enterprise tiers and request
+  quotas were bulk-sweep defaults that Cledara does not publish. Cledara sells a SaaS
+  management seat-and-application subscription, not API capacity: all three plans advertise
+  "Unlimited API access", and the API is included at no extra cost on every plan.
+currency: GBP
+billing_periods:
+  - monthly
+  - yearly
+annual_discount: 16%
+api_pricing_model: included-in-all-plans
+api_metered: false
+plan_count: 3
+addon_count: 3
 plans:
-  - id: cledara-free
-    name: Free
-    type: freemium
-    description: Free entry tier for the Cledara API surface. Intended for evaluation, prototyping, and
-      low-volume integrations. Real limits and pricing must be reconciled with the provider's published
-      plan documentation.
-    entries:
-      - label: API Requests
-        description: Monthly API request quota across all included endpoints
-        name: api_requests
-        type: quota
-        metric: requests
-        limit: 1000
-        timeFrame: month
-        geo: global
-        domains: []
-        unit: 1
-        price: '0.00'
-        userMultiplied: false
-      - label: Rate Limit
-        description: Maximum requests per minute on the free tier
-        name: rate_limit
-        type: rate
-        metric: requests_per_minute
-        limit: 10
-        timeFrame: minute
-        geo: global
-        domains: []
-        unit: 1
-        price: '0.00'
-        userMultiplied: false
-    elements:
-      - name: Public Documentation
-      - name: Community Support
-      - name: Sandbox Access
-      - name: Cledara API
-  - id: cledara-pro
-    name: Professional
+  - id: cledara-basic
+    name: Basic
     type: paid
-    description: Production tier for Cledara. Provides higher quotas, priority support, and access to
-      the broader API portfolio. Pricing placeholder; align with the provider's pricing page.
-    entries:
-      - label: API Requests
-        description: Monthly API request quota
-        name: api_requests
-        type: quota
-        metric: requests
-        limit: 100000
-        timeFrame: month
-        geo: global
-        domains: []
-        unit: 1
-        price: TBD
-        userMultiplied: false
-      - label: Rate Limit
-        description: Maximum requests per minute on the professional tier
-        name: rate_limit
-        type: rate
-        metric: requests_per_minute
-        limit: 100
-        timeFrame: minute
-        geo: global
-        domains: []
-        unit: 1
-        price: '0.00'
-        userMultiplied: false
-      - label: Overage
-        description: Per-request price after monthly quota is exceeded
-        name: overage
-        type: metered
-        metric: requests
-        limit: -1
-        timeFrame: month
-        geo: global
-        domains: []
-        unit: 1000
-        price: TBD
-        userMultiplied: false
+    price: '100.00'
+    currency: GBP
+    period: month
+    target: Typically 25-50 staff
+    promotion: >-
+      Free if you pay for 10 or more applications via Cledara cards in the first month.
+    limits:
+      - label: Applications
+        metric: applications
+        limit: 20
+      - label: API access
+        metric: api_access
+        limit: unlimited
+        quote: Unlimited API access
     elements:
-      - name: All Production Endpoints
-      - name: Email Support
-      - name: SLA Targets
-      - name: Webhook Subscriptions
-      - name: Cledara API
-  - id: cledara-enterprise
-    name: Enterprise
+      - Software directory
+      - Renewal alerts
+      - Spend overview
+      - Payment and cancellation management
+      - Budget controls
+      - Xero and QuickBooks integrations
+      - Unlimited API access
+  - id: cledara-premium
+    name: Premium
+    type: paid
+    price: null
+    price_note: Not published; the page routes to "Book a Demo".
+    currency: GBP
+    period: month
+    target: Typically 51-150 staff
+    promotion: 1% cashback for the first year, capped at the subscription cost.
+    limits:
+      - label: Applications
+        metric: applications
+        limit: 75
+      - label: API access
+        metric: api_access
+        limit: unlimited
+      - label: Cledara Spend active members
+        metric: members
+        limit: 10
+        overage: 'GBP 5.00 per additional member per month'
+    elements:
+      - Everything in Basic
+      - Approval workflows
+      - Invoice automation
+      - Advanced reporting
+      - NetSuite integration
+      - Advanced approvals
+      - Video support
+      - Unlimited API access
+  - id: cledara-pro
+    name: Pro
     type: enterprise
-    description: Custom-negotiated tier for Cledara. Includes dedicated capacity, contractual SLAs, security
-      review, data residency options, and named technical account management.
-    entries:
-      - label: API Requests
-        description: Negotiated request volume; -1 indicates uncapped subject to fair use
-        name: api_requests
-        type: quota
-        metric: requests
-        limit: -1
-        timeFrame: month
-        geo: configurable
-        domains: []
-        unit: 1
-        price: custom
-        userMultiplied: false
-      - label: Rate Limit
-        description: Negotiated burst and steady-state rate
-        name: rate_limit
-        type: rate
-        metric: requests_per_minute
-        limit: 1000
-        timeFrame: minute
-        geo: configurable
-        domains: []
-        unit: 1
-        price: custom
-        userMultiplied: false
+    price: null
+    price_note: '"from" price shown without a figure; the page routes to "Book a Demo".'
+    currency: GBP
+    period: month
+    target: Typically 151+ staff
+    promotion: 1% cashback for the first year.
+    limits:
+      - label: Applications
+        metric: applications
+        limit: custom
+        note: '"A package designed for you"'
+      - label: API access
+        metric: api_access
+        limit: unlimited
+      - label: Cledara Spend active members
+        metric: members
+        limit: 50
+        overage: 'GBP 5.00 per additional member per month'
     elements:
-      - name: Unlimited / Negotiated Volume
-      - name: 24/7 Dedicated Support
-      - name: Contractual SLA
-      - name: Security & Compliance Review
-      - name: Dedicated Account Manager
-      - name: Custom Data Residency
-      - name: Cledara API
+      - Everything in Premium
+      - Okta SSO
+      - Bank transfer payments
+      - Dedicated implementation manager
+      - Dedicated success manager
+      - Spend reviews
+      - Unlimited API access
+addons:
+  - id: spend-optimization
+    name: Spend Optimization
+    price_monthly: '200.00'
+    price_yearly: '1500.00'
+    currency: GBP
+    note: 'GBP 150.00 per month with a GBP 50 checkout discount.'
+    elements:
+      - Usage insights
+      - Duplicate and price alerts
+      - Benchmarks
+      - AI copilot
+  - id: it-management
+    name: IT Management
+    price_monthly: '150.00'
+    price_yearly: '1500.00'
+    currency: GBP
+    elements:
+      - Access workflows
+      - Shadow IT detection
+      - Onboarding and offboarding
+      - HR integration
+  - id: software-compliance
+    name: Software Compliance
+    price_monthly: '150.00'
+    price_yearly: '1500.00'
+    currency: GBP
+    elements:
+      - ISO 27001 and SOC 2 checks
+      - Compliance questionnaires
+      - Customizable templates
+included_products:
+  - name: Cledara Spend
+    availability: all plans
+    elements:
+      - 30 free business and travel cards
+      - Spend limits
+      - Apple Pay and Google Pay
+      - Receipt tracking
+      - Accounting sync
+related_surfaces:
+  - name: Cledara SaaS Market Data Hub
+    url: https://data.cledara.com/
+    pricing: >-
+      The public dataset is free to read and free to cite with a link. Bulk/programmatic
+      access is sales-gated behind a mailto (b@cledara.com, subject "API Access Request").
+      The MCP endpoint at https://data.cledara.com/mcp requires OAuth and publishes no price.
 maintainers:
   - FN: Kin Lane
     email: kinlane@gmail.com

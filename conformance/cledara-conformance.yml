@@ -1,0 +1,156 @@
+generated: '2026-09-05'
+method: searched
+source: >-
+  openapi/cledara-api-openapi.json,
+  https://data.cledara.com/.well-known/oauth-authorization-server (probed 2026-09-05),
+  https://www.cledara.com/security, https://trust.cledara.com/,
+  live probes of https://api.cledara.com and https://data.cledara.com/mcp
+provider: Cledara
+providerId: cledara
+summary: >-
+  Cledara conforms to the general web/API standards its two surfaces sit on — OpenAPI 3.1,
+  RFC 6750 bearer auth on the REST side, and a genuinely complete OAuth 2.1 discovery stack
+  (RFC 8414 + RFC 7591 + PKCE) on the MCP side. It does NOT publish RFC 9457 problem details,
+  RFC 8594 deprecation signalling, RFC 9116 security.txt, or RFC 9728 protected-resource
+  metadata. No payments domain standard is declared in the contract.
+conformance:
+  - id: openapi-3.1
+    name: OpenAPI Specification 3.1.0
+    conforms: true
+    evidence: openapi/cledara-api-openapi.json (openapi:"3.1.0"), served at https://cledara-public.s3.eu-west-2.amazonaws.com/public-api/open-api.json and rendered at https://api-docs.cledara.com/
+  - id: rfc6750
+    name: 'OAuth 2.0 Bearer Token Usage (RFC 6750)'
+    conforms: partial
+    evidence: >-
+      Tokens are sent as "Authorization: Bearer <key>" per the spec's BearerAuth scheme, but
+      401 responses carry no WWW-Authenticate challenge, which RFC 6750 §3 requires.
+    probe: GET https://api.cledara.com/v0/applications -> 401, no WWW-Authenticate header (2026-09-05)
+  - id: rfc8414
+    name: 'OAuth 2.0 Authorization Server Metadata (RFC 8414)'
+    conforms: true
+    evidence: https://data.cledara.com/.well-known/oauth-authorization-server returned HTTP 200 with issuer, authorization_endpoint, token_endpoint, registration_endpoint, revocation_endpoint, grant_types_supported, response_types_supported, code_challenge_methods_supported and scopes_supported (2026-09-05)
+    file: well-known/cledara-data-oauth-authorization-server.json
+  - id: rfc7591
+    name: 'OAuth 2.0 Dynamic Client Registration (RFC 7591)'
+    conforms: true
+    evidence: registration_endpoint https://data.cledara.com/oauth/register declared in the RFC 8414 metadata document
+  - id: rfc7636
+    name: 'Proof Key for Code Exchange (RFC 7636)'
+    conforms: true
+    evidence: 'code_challenge_methods_supported: ["S256"] in the RFC 8414 metadata document'
+  - id: rfc7009
+    name: 'OAuth 2.0 Token Revocation (RFC 7009)'
+    conforms: true
+    evidence: revocation_endpoint https://data.cledara.com/oauth/revoke declared in the RFC 8414 metadata document
+  - id: rfc9728
+    name: 'OAuth 2.0 Protected Resource Metadata (RFC 9728)'
+    conforms: false
+    evidence: GET https://data.cledara.com/.well-known/oauth-protected-resource returned HTTP 404 (2026-09-05); the MCP 401 also carries no WWW-Authenticate pointer, so resource-first discovery fails
+  - id: mcp
+    name: Model Context Protocol (streamable HTTP transport)
+    conforms: partial
+    evidence: >-
+      https://data.cledara.com/mcp answers GET with 405 {"error":"SSE sessions not supported.
+      Use POST for all requests."} and POST tools/list with 401 {"error":"Unauthorized"}. The
+      transport is live; protocol-level conformance beyond the handshake could not be
+      verified without an access token.
+  - id: rfc9457
+    name: 'Problem Details for HTTP APIs (RFC 9457)'
+    conforms: false
+    evidence: >-
+      Errors are a vendor envelope ({message, error:{method,url,status,cledaraType,errorId}})
+      served as application/json, not application/problem+json. See errors/cledara-problem-types.yml.
+  - id: rfc8594
+    name: 'Sunset HTTP Header (RFC 8594)'
+    conforms: false
+    evidence: No Sunset or Deprecation header observed on any response; no deprecation policy published.
+  - id: rfc9116
+    name: 'security.txt (RFC 9116)'
+    conforms: false
+    evidence: /.well-known/security.txt returned 404 on all ten Cledara hosts probed (well-known/cledara-well-known.yml)
+  - id: rfc3339
+    name: 'Date and Time on the Internet (RFC 3339)'
+    conforms: true
+    evidence: from/to query parameters and authorizedAt/settledAt/createdAt are declared format date-time with RFC 3339 examples in openapi/cledara-api-openapi.json
+  - id: iso8601
+    name: ISO 8601 dates
+    conforms: true
+    evidence: nextRenewalDate, nextPayment.date and invoiceDetails.date are declared format date with ISO 8601 semantics
+  - id: iso4217
+    name: ISO 4217 currency codes
+    conforms: true
+    evidence: Budget.currency is documented as "ISO 4217 currency code"; Transaction.currency is constrained to GBP, EUR, USD
+  - id: rfc4122
+    name: 'UUID (RFC 4122)'
+    conforms: true
+    evidence: every id in the contract is declared format uuid
+  - id: rate-limit-headers
+    name: Rate-limit response signalling (X-RateLimit-* / Retry-After)
+    conforms: true
+    evidence: >-
+      X-RateLimit-Limit, X-RateLimit-Remaining and X-RateLimit-Reset are declared as REQUIRED
+      response headers on every 200 and Retry-After on every 429 in the OpenAPI itself, and
+      X-RateLimit-Limit/Remaining/Reset were observed on a live 401 from https://api.cledara.com.
+    note: >-
+      These are the legacy X-prefixed headers, not the IETF draft RateLimit/RateLimit-Policy
+      fields. Widely deployed, but not the standards-track spelling.
+  - id: idempotency-key
+    name: 'The Idempotency-Key HTTP Header Field (IETF draft)'
+    conforms: na
+    evidence: The published API has no mutating operations; see conventions/cledara-conventions.yml.
+  - id: json-api
+    name: 'JSON:API'
+    conforms: false
+    evidence: Plain JSON; no JSON:API document structure, media type or links.
+  - id: odata
+    name: OData
+    conforms: false
+    evidence: No $metadata endpoint or OData query options.
+  - id: scim
+    name: 'SCIM (RFC 7643/7644)'
+    conforms: false
+    evidence: No SCIM schema URNs and no user/group provisioning endpoints in the public API.
+domain_standards:
+  regime: payments
+  regime_basis: >-
+    Cledara issues Mastercard and Visa virtual and Spend cards as an FCA-registered EMD agent
+    of Modulr FS Limited, which puts it in the payments regime (tags "card", "cards", "issuing").
+  declared_in_contract: none
+  candidates_checked:
+    - id: pci-dss
+      declared: false
+      note: >-
+        Cledara's security page cites PCI Level 1 for AWS, its hosting provider, not for
+        Cledara. No PCI DSS attestation is published for Cledara itself.
+    - id: iso-20022
+      declared: false
+      note: >-
+        No ISO 20022 message types anywhere in the contract. Transactions are exposed as a
+        vendor JSON shape, not pacs/camt messages.
+    - id: psd2-sca
+      declared: false
+      note: SCA is handled inside the regulated card programme, not exposed through the API.
+    - id: 3-d-secure
+      declared: false
+    - id: emv
+      declared: false
+    - id: confirmation-of-payee
+      declared: false
+    - id: open-payments
+      declared: false
+  finding: >-
+    REWARD-ONLY, NOT PENALISED. Cledara's public API is a read-only reporting surface over
+    its own workspace — it initiates no payment, so the payments message standards have
+    nothing to attach to. The honest reading is that this contract sits outside the payments
+    standards perimeter rather than failing it. If Cledara later exposes card issuance or
+    transfer initiation through the API, ISO 20022 and PCI DSS become live questions.
+compliance_programs:
+  programs:
+    - SOC 2 Type II (Cledara)
+    - GDPR (Cledara)
+    - 'FCA EMD Agent registration 902831 (Cledara Limited, under Modulr FS Limited FRN 900573)'
+    - 'DNB Electronic Money Institution R182870 (Modulr Finance B.V.)'
+  detail: security/cledara-trust-center.yml
+maintainers:
+  - FN: Kin Lane
+    email: kinlane@gmail.com

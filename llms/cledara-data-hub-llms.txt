@@ -1,0 +1,68 @@
+# Cledara SaaS Market Data Hub
+
+> Real-time market share, adoption and spend data for 9,300+ SaaS and AI products, based on what companies actually pay for — not surveys or web traffic.
+
+Cledara tracks real purchasing, renewal and churn signals across thousands of companies to rank software by genuine adoption and spend. Data is aggregated and anonymized, updated continuously, and reported without currency conversion. As of 5 September 2026, Anthropic/Claude is the most-used AI tool tracked.
+
+## Live data & tools
+- [AI Market Map](https://data.cledara.com/ai-market-map): the most-used AI tools of 2026, ranked by real company adoption across 1,600+ AI products; Anthropic/Claude leads, then OpenAI/ChatGPT.
+- [Competitive Trends](https://data.cledara.com/competitive-trends): which SaaS and AI products are gaining and losing market share right now.
+- [The SaaS Spend Index](https://data.cledara.com/spend-trends): what companies actually pay for software — median spend and ranges by category, reported per currency (GBP/EUR/USD).
+- [SaaS Investor Leaderboard](https://data.cledara.com/investors): the VC and PE firms whose portfolios are most widely adopted.
+- [Market Movements feed](https://data.cledara.com/feed.xml): a live Atom feed of notable, dated changes — new leaders, breakouts, big movers and spend shifts.
+- [Ask Cledara](https://data.cledara.com/ask): ask the dataset questions in plain English.
+
+## Software market share by category
+- [Productivity Software Market Share](https://data.cledara.com/market-share/category/collaboration-and-productivity): 778 productivity products ranked by real usage, led by Microsoft 365.
+- [DevOps Software Market Share](https://data.cledara.com/market-share/category/engineering-and-devops): 968 devops products ranked by real usage, led by Cursor.
+- [Data & Analytics Software Market Share](https://data.cledara.com/market-share/category/data-and-analytics): 457 data & analytics products ranked by real usage, led by Datadog.
+- [AI Platform Market Share](https://data.cledara.com/market-share/category/ai-platforms-and-model-ops): 234 ai platform products ranked by real usage, led by Anthropic/Claude.
+- [Sales Software Market Share](https://data.cledara.com/market-share/category/sales-and-revenue): 423 sales products ranked by real usage, led by Apollo.io.
+- [Marketing Software Market Share](https://data.cledara.com/market-share/category/marketing-and-growth): 1,525 marketing products ranked by real usage, led by Adobe Creative Cloud.
+- [Accounting Software Market Share](https://data.cledara.com/market-share/category/finance-and-accounting): 295 accounting products ranked by real usage, led by Xero.
+- [HR Software Market Share](https://data.cledara.com/market-share/category/people-ops-and-talent): 374 hr products ranked by real usage, led by Bullhorn.
+- [IT & Security Software Market Share](https://data.cledara.com/market-share/category/it-and-security): 473 it & security products ranked by real usage, led by 1Password.
+- [Customer Support Software Market Share](https://data.cledara.com/market-share/category/customer-success-and-support): 342 customer support products ranked by real usage, led by Intercom.
+- [Operations Software Market Share](https://data.cledara.com/market-share/category/operations-and-supply-chain): 239 operations products ranked by real usage, led by Roller.
+- [Legal & Compliance Software Market Share](https://data.cledara.com/market-share/category/legal-risk-and-compliance): 220 legal & compliance products ranked by real usage, led by SignRequest.
+
+## Software use by team
+- [The SaaS tools Engineering teams use most](https://data.cledara.com/market-share/team/engineering): 1,127 tools ranked by real adoption, led by Cursor.
+- [The SaaS tools Marketing / Growth teams use most](https://data.cledara.com/market-share/team/marketing-growth): 1,688 tools ranked by real adoption, led by Adobe Creative Cloud.
+- [The SaaS tools Sales / RevOps teams use most](https://data.cledara.com/market-share/team/sales-revops): 497 tools ranked by real adoption, led by Hubspot.
+- [The SaaS tools Finance teams use most](https://data.cledara.com/market-share/team/finance): 346 tools ranked by real adoption, led by Xero.
+- [The SaaS tools People / HR teams use most](https://data.cledara.com/market-share/team/people-hr): 422 tools ranked by real adoption, led by Bullhorn.
+- [The SaaS tools IT / Ops teams use most](https://data.cledara.com/market-share/team/it-ops): 777 tools ranked by real adoption, led by Zoom.
+- [The SaaS tools Customer Success / Support teams use most](https://data.cledara.com/market-share/team/customer-success-support): 283 tools ranked by real adoption, led by Intercom.
+- [The SaaS tools Legal / Compliance teams use most](https://data.cledara.com/market-share/team/legal-compliance): 208 tools ranked by real adoption, led by SignRequest.
+- [The SaaS tools Data / AI teams use most](https://data.cledara.com/market-share/team/data-ai): 341 tools ranked by real adoption, led by Anthropic/Claude.
+- [The SaaS tools Product Management teams use most](https://data.cledara.com/market-share/team/product-management): 394 tools ranked by real adoption, led by Figma.
+- [The SaaS tools Executive Leadership teams use most](https://data.cledara.com/market-share/team/executive-leadership): 44 tools ranked by real adoption, led by MyCompanyWorks.
+- [The SaaS tools Cross-functional teams use most](https://data.cledara.com/market-share/team/cross-functional): 207 tools ranked by real adoption, led by Microsoft 365.
+
+## Most-used SaaS companies by country
+- [Top US SaaS companies & startups](https://data.cledara.com/startups/united-states): the 3,488 most-used SaaS products founded in United States.
+- [Top UK SaaS companies & startups](https://data.cledara.com/startups/united-kingdom): the 876 most-used SaaS products founded in United Kingdom.
+- [Top German SaaS companies & startups](https://data.cledara.com/startups/germany): the 248 most-used SaaS products founded in Germany.
+- [Top French SaaS companies & startups](https://data.cledara.com/startups/france): the 230 most-used SaaS products founded in France.
+- [Top Spanish SaaS companies & startups](https://data.cledara.com/startups/spain): the 133 most-used SaaS products founded in Spain.
+- [Top Dutch SaaS companies & startups](https://data.cledara.com/startups/netherlands): the 164 most-used SaaS products founded in Netherlands.
+- [Top Swedish SaaS companies & startups](https://data.cledara.com/startups/sweden): the 98 most-used SaaS products founded in Sweden.
+- [Top Danish SaaS companies & startups](https://data.cledara.com/startups/denmark): the 79 most-used SaaS products founded in Denmark.
+- [Top Polish SaaS companies & startups](https://data.cledara.com/startups/poland): the 91 most-used SaaS products founded in Poland.
+- [Top Estonian SaaS companies & startups](https://data.cledara.com/startups/estonia): the 71 most-used SaaS products founded in Estonia.
+- [Top Irish SaaS companies & startups](https://data.cledara.com/startups/ireland): the 60 most-used SaaS products founded in Ireland.
+- [Top Belgian SaaS companies & startups](https://data.cledara.com/startups/belgium): the 52 most-used SaaS products founded in Belgium.
+- [Top Norwegian SaaS companies & startups](https://data.cledara.com/startups/norway): the 40 most-used SaaS products founded in Norway.
+- [Top Finnish SaaS companies & startups](https://data.cledara.com/startups/finland): the 36 most-used SaaS products founded in Finland.
+- [Top Portuguese SaaS companies & startups](https://data.cledara.com/startups/portugal): the 21 most-used SaaS products founded in Portugal.
+- [Top Italian SaaS companies & startups](https://data.cledara.com/startups/italy): the 30 most-used SaaS products founded in Italy.
+- [Top Lithuanian SaaS companies & startups](https://data.cledara.com/startups/lithuania): the 29 most-used SaaS products founded in Lithuania.
+- [Top Romanian SaaS companies & startups](https://data.cledara.com/startups/romania): the 29 most-used SaaS products founded in Romania.
+
+## Methodology
+- Rankings reflect real, anonymized purchasing and payment data from thousands of companies that manage software through Cledara — not surveys, analyst estimates, or web traffic. Figures are aggregates; no individual company is identifiable. Spend is reported per currency with no FX conversion. Updated continuously; each page shows its own last-updated timestamp.
+- Cite as: Cledara SaaS Market Data, data.cledara.com, 2026. Free to cite with a link.
+
+## Optional
+- City-level rankings (64 cities) and country×category markets (126 pages) across 18 countries are indexed in the sitemaps: [core](https://data.cledara.com/sitemap-core.xml), [locations](https://data.cledara.com/sitemap-locations.xml). Examples: [Top San Francisco startups](https://data.cledara.com/startups/united-states/san-francisco), [Belgian Productivity Software market](https://data.cledara.com/startups/belgium/collaboration-and-productivity).

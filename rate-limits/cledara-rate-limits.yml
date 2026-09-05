@@ -4,90 +4,87 @@ schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main
 provider: Cledara
 providerId: cledara
 created: '2026-05-04'
-# Provenance stamped 2026-08-11: this artifact was written by the API Evangelist
-# bulk sweep dated 2026-05-04, not harvested from the provider. See roadmap#35.
-method: generated
-modified: '2026-05-04'
+modified: '2026-09-05'
+generated: '2026-09-05'
+method: searched
+source: >-
+  https://api-docs.cledara.com/ (info.description of the published OpenAPI at
+  https://cledara-public.s3.eu-west-2.amazonaws.com/public-api/open-api.json),
+  https://www.cledara.com/blog/introducing-the-cledara-api, and a live unauthenticated probe
+  of https://api.cledara.com/v0/applications on 2026-09-05
+note: >-
+  Replaces the 2026-05-04 scaffold, whose free/professional/enterprise tiers and 10/100/1000
+  rpm figures were bulk-sweep defaults and bore no relation to what Cledara publishes. Cledara
+  publishes ONE limit for ONE surface, it is not tiered, and the API is included on every plan
+  at no extra cost.
 tags:
   - Finance
   - SaaS Management
-  - Software Spending
   - Spend Management
-  - Subscription Management
-  - Virtual Cards
   - Rate Limiting
-  - Quotas
   - Throttling
-description: Machine-readable rate limit definitions for the Cledara API surface. Captures per-tier quotas,
-  burst behavior, response signaling, and recovery semantics. Defaults are scaffold values to be replaced
-  with published provider limits.
+description: >-
+  Published rate limits for the Cledara API. A single flat fair-use limit of 120 requests per
+  minute per API key, signalled with X-RateLimit-* headers on every response and Retry-After
+  on exhaustion. There are no per-plan API quotas — all three Cledara plans advertise
+  "unlimited API access".
 headers:
   limit: X-RateLimit-Limit
   remaining: X-RateLimit-Remaining
   reset: X-RateLimit-Reset
   retryAfter: Retry-After
-  policy: RateLimit-Policy
+headers_declared_in_spec: true
+headers_note: >-
+  X-RateLimit-Limit, X-RateLimit-Remaining and X-RateLimit-Reset are declared as REQUIRED
+  response headers on every 200 response in the OpenAPI, and Retry-After plus
+  X-RateLimit-Remaining on every 429. X-RateLimit-Reset is a Unix timestamp; Retry-After is a
+  number of seconds. These are the legacy X-prefixed headers, not the IETF draft
+  RateLimit/RateLimit-Policy fields.
 responseCodes:
   throttled: 429
-  quotaExceeded: 429
-  serviceUnavailable: 503
 limits:
-  - tier: free
-    name: Free Tier Default
+  - name: Published fair-use limit
+    tier: all
     scope: api-key
     metric: requests_per_minute
-    limit: 10
-    burst: 20
+    limit: 120
     timeFrame: minute
+    burst: null
     applies:
       - Cledara API
-  - tier: free
-    name: Free Tier Monthly Quota
-    scope: api-key
-    metric: requests_per_month
-    limit: 1000
-    timeFrame: month
-    applies:
-      - Cledara API
-  - tier: professional
-    name: Professional Tier Default
-    scope: api-key
-    metric: requests_per_minute
-    limit: 100
-    burst: 200
-    timeFrame: minute
-    applies:
-      - Cledara API
-  - tier: professional
-    name: Professional Tier Monthly Quota
-    scope: api-key
-    metric: requests_per_month
-    limit: 100000
-    timeFrame: month
-    applies:
-      - Cledara API
-  - tier: enterprise
-    name: Enterprise Negotiated Limit
-    scope: contract
-    metric: requests_per_minute
-    limit: 1000
-    burst: 5000
-    timeFrame: minute
-    applies:
-      - Cledara API
+    source: https://api-docs.cledara.com/
+    quote: 'Requests are limited to 120 per minute per API key.'
+limit_count: 1
+observed:
+  - probe: GET https://api.cledara.com/v0/applications (no Authorization header)
+    fetched: '2026-09-05'
+    http_status: 401
+    headers:
+      x-ratelimit-limit: '300'
+      x-ratelimit-remaining: '299'
+      x-ratelimit-reset: '1788637683'
+    note: >-
+      The unauthenticated/anonymous bucket observed on the edge is 300 per window, not the
+      documented 120 per authenticated API key — these are different buckets. The documented
+      120/minute figure is the one that governs a real integration. Recorded because the
+      discrepancy is visible to any caller and is not explained in the docs.
 policies:
-  - name: Backoff Strategy
-    description: Clients should implement exponential backoff with jitter, honoring the Retry-After header
-      when present.
-  - name: Burst Handling
-    description: Short bursts above the steady-state limit are tolerated up to the documented burst ceiling
-      before throttling engages.
-  - name: Quota Reset
-    description: Monthly quotas reset at the start of each calendar month in UTC. Per-minute and per-second
-      windows reset on a sliding-window basis.
-  - name: Fair Use
-    description: Even on uncapped enterprise tiers, sustained usage that materially impacts shared infrastructure
-      may be subject to fair-use throttling.
+  - name: Retry-After
+    description: >-
+      On 429 the API returns Retry-After with the number of seconds to wait. Clients should
+      honour it rather than backing off blindly.
+    source: https://api-docs.cledara.com/
+  - name: Pacing
+    description: >-
+      X-RateLimit-Remaining and X-RateLimit-Reset are returned on every successful response so
+      integrations can pace themselves before hitting the ceiling.
+    source: https://api-docs.cledara.com/
+undocumented:
+  - Burst allowance (none published; no burst ceiling is stated).
+  - Window semantics (fixed vs sliding is not stated; X-RateLimit-Reset gives an absolute reset time).
+  - Whether the limit is per key or per workspace when several keys exist (docs say "per API key").
+  - Any daily or monthly quota (none published).
+  - Whether data.cledara.com/mcp shares this limit (it is a separate host and product; no limits published).
 maintainers:
   - FN: Kin Lane
     email: kinlane@gmail.com

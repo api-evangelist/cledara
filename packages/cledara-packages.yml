@@ -1,0 +1,65 @@
+generated: '2026-09-05'
+method: searched
+source: >-
+  registry.npmjs.org search, pypi.org, rubygems.org, crates.io, packagist.org,
+  api.github.com (users/Cledara + repository search "cledara"),
+  https://api-docs.cledara.com/, https://www.cledara.com/blog/introducing-the-cledara-api
+provider: Cledara
+providerId: cledara
+package_count: 0
+official_count: 0
+packages: []
+finding: >-
+  Cledara publishes NO client libraries. There is no first-party SDK on npm, PyPI, RubyGems,
+  crates.io, Packagist, Maven Central, NuGet or pkg.go.dev, and no first-party CLI. Callers
+  hand-roll HTTP against a three-operation Bearer-token API.
+evidence:
+  - registry: npm
+    query: 'https://registry.npmjs.org/-/v1/search?text=cledara'
+    result: no packages returned
+    checked: '2026-09-05'
+  - registry: pypi
+    url: https://pypi.org/pypi/cledara/json
+    status: 404
+    checked: '2026-09-05'
+  - registry: rubygems
+    url: https://rubygems.org/api/v1/gems/cledara.json
+    status: 404
+    checked: '2026-09-05'
+  - registry: crates.io
+    url: https://crates.io/api/v1/crates/cledara
+    status: 403
+    note: crates.io rejects unauthenticated non-browser agents; no cledara crate is referenced anywhere in the provider's docs either
+    checked: '2026-09-05'
+  - registry: packagist
+    url: 'https://packagist.org/search.json?q=cledara'
+    status: 200
+    result: no first-party package
+    checked: '2026-09-05'
+  - registry: github
+    url: https://api.github.com/users/Cledara/repos
+    status: 200
+    result: 0 public repositories
+    note: >-
+      github.com/Cledara resolves to a USER account (id 74553538) with no public repositories,
+      not to an organization — https://api.github.com/orgs/Cledara returns 404. The
+      GitHubOrganization pointer in apis.yml therefore points at an empty personal account.
+    checked: '2026-09-05'
+  - registry: github-search
+    query: 'https://api.github.com/search/repositories?q=cledara'
+    result: >-
+      7 repositories, none owned by Cledara — job-challenge repos, a third-party
+      cledara-tripletex-converter, a browser extension, and this API Evangelist profile repo.
+    checked: '2026-09-05'
+notes:
+  - >-
+    Cledara's own launch messaging treats the absence of an SDK as a feature: "you do not need
+    a developer. Your AI coding agent reads the docs, takes an API key, and builds the
+    integration for you." The OpenAPI at api-docs.cledara.com is the distribution mechanism,
+    with a coding agent as the generator.
+  - >-
+    No abandonment signal can be read here because there is nothing published to go stale. That
+    is a different and more honest finding than a stale SDK.
+maintainers:
+  - FN: Kin Lane
+    email: kinlane@gmail.com

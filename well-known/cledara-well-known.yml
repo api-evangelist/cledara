@@ -1,0 +1,285 @@
+generated: '2026-09-05'
+method: probed
+source: live GET of the named /.well-known/ paths on every Cledara host in apis.yml plus the OpenAPI servers[]
+  host (https://api.cledara.com) and the docs host (https://api-docs.cledara.com)
+provider: Cledara
+providerId: cledara
+summary: 'One real document served across ten hosts: https://data.cledara.com/.well-known/oauth-authorization-server,
+  the RFC 8414 authorization-server metadata backing the OAuth-protected MCP endpoint at https://data.cledara.com/mcp.
+  No security.txt, no api-catalog, no ai-plugin.json, no OpenID configuration anywhere. The 200s recorded
+  on statuspage.cledara.com and trust.cledara.com are single-page-app catch-alls returning the same HTML
+  shell for every path and are counted as misses, not documents.'
+hosts:
+- host: www.cledara.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+    content_type: text/html; charset=utf-8
+    bytes: 88
+  - path: /.well-known/openid-configuration
+    status: 404
+    content_type: text/html; charset=utf-8
+    bytes: 88
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+    content_type: text/html; charset=utf-8
+    bytes: 88
+  - path: /.well-known/oauth-protected-resource
+    status: 404
+    content_type: text/html; charset=utf-8
+    bytes: 88
+  - path: /.well-known/api-catalog
+    status: 404
+    content_type: text/html; charset=utf-8
+    bytes: 88
+  - path: /.well-known/ai-plugin.json
+    status: 404
+    content_type: text/html; charset=utf-8
+    bytes: 88
+- host: cledara.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+    content_type: text/html; charset=utf-8
+    bytes: 88
+  - path: /.well-known/openid-configuration
+    status: 404
+    content_type: text/html; charset=utf-8
+    bytes: 88
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+    content_type: text/html; charset=utf-8
+    bytes: 88
+  - path: /.well-known/oauth-protected-resource
+    status: 404
+    content_type: text/html; charset=utf-8
+    bytes: 88
+  - path: /.well-known/api-catalog
+    status: 404
+    content_type: text/html; charset=utf-8
+    bytes: 88
+  - path: /.well-known/ai-plugin.json
+    status: 404
+    content_type: text/html; charset=utf-8
+    bytes: 88
+- host: api.cledara.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+    content_type: text/plain; charset=utf-8
+    bytes: 9
+  - path: /.well-known/openid-configuration
+    status: 404
+    content_type: text/plain; charset=utf-8
+    bytes: 9
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+    content_type: text/plain; charset=utf-8
+    bytes: 9
+  - path: /.well-known/oauth-protected-resource
+    status: 404
+    content_type: text/plain; charset=utf-8
+    bytes: 9
+  - path: /.well-known/api-catalog
+    status: 404
+    content_type: text/plain; charset=utf-8
+    bytes: 9
+  - path: /.well-known/ai-plugin.json
+    status: 404
+    content_type: text/plain; charset=utf-8
+    bytes: 9
+- host: api-docs.cledara.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+    content_type: text/html; charset=utf-8
+    bytes: 9379
+  - path: /.well-known/openid-configuration
+    status: 404
+    content_type: text/html; charset=utf-8
+    bytes: 9379
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+    content_type: text/html; charset=utf-8
+    bytes: 9379
+  - path: /.well-known/oauth-protected-resource
+    status: 404
+    content_type: text/html; charset=utf-8
+    bytes: 9379
+  - path: /.well-known/api-catalog
+    status: 404
+    content_type: text/html; charset=utf-8
+    bytes: 9379
+  - path: /.well-known/ai-plugin.json
+    status: 404
+    content_type: text/html; charset=utf-8
+    bytes: 9379
+- host: app.cledara.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 403
+    content_type: application/xml
+    bytes: 111
+  - path: /.well-known/openid-configuration
+    status: 403
+    content_type: application/xml
+    bytes: 111
+  - path: /.well-known/oauth-authorization-server
+    status: 403
+    content_type: application/xml
+    bytes: 111
+  - path: /.well-known/oauth-protected-resource
+    status: 403
+    content_type: application/xml
+    bytes: 111
+  - path: /.well-known/api-catalog
+    status: 403
+    content_type: application/xml
+    bytes: 111
+  - path: /.well-known/ai-plugin.json
+    status: 403
+    content_type: application/xml
+    bytes: 111
+- host: help.cledara.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+    content_type: text/html; charset=utf-8
+    bytes: 21109
+  - path: /.well-known/openid-configuration
+    status: 404
+    content_type: text/html; charset=utf-8
+    bytes: 21109
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+    content_type: text/html; charset=utf-8
+    bytes: 21109
+  - path: /.well-known/oauth-protected-resource
+    status: 404
+    content_type: text/html; charset=utf-8
+    bytes: 21109
+  - path: /.well-known/api-catalog
+    status: 404
+    content_type: text/html; charset=utf-8
+    bytes: 21109
+  - path: /.well-known/ai-plugin.json
+    status: 404
+    content_type: text/html; charset=utf-8
+    bytes: 21109
+- host: announcements.cledara.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+    content_type: text/html; charset=utf-8
+    bytes: 21341
+  - path: /.well-known/openid-configuration
+    status: 404
+    content_type: text/html; charset=utf-8
+    bytes: 21349
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+    content_type: text/html; charset=utf-8
+    bytes: 21355
+  - path: /.well-known/oauth-protected-resource
+    status: 404
+    content_type: text/html; charset=utf-8
+    bytes: 21353
+  - path: /.well-known/api-catalog
+    status: 404
+    content_type: text/html; charset=utf-8
+    bytes: 21340
+  - path: /.well-known/ai-plugin.json
+    status: 404
+    content_type: text/html; charset=utf-8
+    bytes: 21343
+- host: data.cledara.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+    content_type: text/html; charset=utf-8
+    bytes: 54844
+  - path: /.well-known/openid-configuration
+    status: 404
+    content_type: text/html; charset=utf-8
+    bytes: 54844
+  - path: /.well-known/oauth-authorization-server
+    status: 200
+    file: cledara-data-oauth-authorization-server.json
+    content_type: application/json; charset=utf-8
+    bytes: 533
+  - path: /.well-known/oauth-protected-resource
+    status: 404
+    content_type: text/html; charset=utf-8
+    bytes: 54844
+  - path: /.well-known/api-catalog
+    status: 404
+    content_type: text/html; charset=utf-8
+    bytes: 54844
+  - path: /.well-known/ai-plugin.json
+    status: 404
+    content_type: text/html; charset=utf-8
+    bytes: 54844
+- host: statuspage.cledara.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 200
+    content_type: text/html; charset=utf-8
+    bytes: 408728
+    note: 200 returned an HTML/SPA shell, not a document — treated as a miss
+  - path: /.well-known/openid-configuration
+    status: 200
+    content_type: text/html; charset=utf-8
+    bytes: 408728
+    note: 200 returned an HTML/SPA shell, not a document — treated as a miss
+  - path: /.well-known/oauth-authorization-server
+    status: 200
+    content_type: text/html; charset=utf-8
+    bytes: 408728
+    note: 200 returned an HTML/SPA shell, not a document — treated as a miss
+  - path: /.well-known/oauth-protected-resource
+    status: 200
+    content_type: text/html; charset=utf-8
+    bytes: 408728
+    note: 200 returned an HTML/SPA shell, not a document — treated as a miss
+  - path: /.well-known/api-catalog
+    status: 200
+    content_type: text/html; charset=utf-8
+    bytes: 408728
+    note: 200 returned an HTML/SPA shell, not a document — treated as a miss
+  - path: /.well-known/ai-plugin.json
+    status: 200
+    content_type: text/html; charset=utf-8
+    bytes: 408728
+    note: 200 returned an HTML/SPA shell, not a document — treated as a miss
+- host: trust.cledara.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 200
+    content_type: text/html
+    bytes: 5434
+    note: 200 returned an HTML/SPA shell, not a document — treated as a miss
+  - path: /.well-known/openid-configuration
+    status: 200
+    content_type: text/html
+    bytes: 5434
+    note: 200 returned an HTML/SPA shell, not a document — treated as a miss
+  - path: /.well-known/oauth-authorization-server
+    status: 200
+    content_type: text/html
+    bytes: 5434
+    note: 200 returned an HTML/SPA shell, not a document — treated as a miss
+  - path: /.well-known/oauth-protected-resource
+    status: 200
+    content_type: text/html
+    bytes: 5434
+    note: 200 returned an HTML/SPA shell, not a document — treated as a miss
+  - path: /.well-known/api-catalog
+    status: 200
+    content_type: text/html
+    bytes: 5434
+    note: 200 returned an HTML/SPA shell, not a document — treated as a miss
+  - path: /.well-known/ai-plugin.json
+    status: 200
+    content_type: text/html
+    bytes: 5434
+    note: 200 returned an HTML/SPA shell, not a document — treated as a miss

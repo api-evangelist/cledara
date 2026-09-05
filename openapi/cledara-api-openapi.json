@@ -1,0 +1,756 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Cledara API",
+    "version": "v1",
+    "description": "\nThe Cledara API gives you programmatic access to your Cledara workspace — applications, transactions, and more coming soon.\n\n## Authentication\n\nAll endpoints require an API key passed as a Bearer token: `Authorization: Bearer <your-api-key>`\n\nAPI keys are managed in the Cledara web app under **Profile → API Keys**. Each key grants the same level of access as the user who created it.\n\n## Rate limits\n\nRequests are limited to **120 per minute per API key**. Every response includes the following headers:\n\n| Header | Description |\n|--------|-------------|\n| `X-RateLimit-Limit` | Maximum requests allowed in the current window |\n| `X-RateLimit-Remaining` | Requests remaining in the current window |\n| `X-RateLimit-Reset` | Unix timestamp when the window resets |\n\nWhen the limit is exceeded the API responds with `429 Too Many Requests` and an additional `Retry-After` header indicating how many seconds to wait before retrying.\n"
+  },
+  "servers": [
+    {
+      "url": "https://api.cledara.com"
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "BearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "description": "API key issued from the Cledara Web Application"
+      }
+    },
+    "schemas": {
+      "Application": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Application unique identifier",
+            "example": "123e4567-e89b-12d3-a456-426614174000"
+          },
+          "name": {
+            "type": "string",
+            "description": "Application name"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["pending", "requested", "active", "disabled", "inactive"],
+            "description": "Application status"
+          },
+          "budget": {
+            "$ref": "#/components/schemas/Budget"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "ISO 8601 timestamp of application creation"
+          },
+          "owner": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "format": "uuid",
+                "description": "Member unique identifier"
+              },
+              "name": {
+                "type": "string",
+                "description": "Member name"
+              }
+            },
+            "required": ["id", "name"],
+            "description": "Application owner"
+          },
+          "nextRenewalDate": {
+            "type": ["string", "null"],
+            "format": "date",
+            "description": "ISO 8601 date of next renewal date"
+          },
+          "balance": {
+            "type": ["number", "null"],
+            "description": "Application balance"
+          },
+          "nextPayment": {
+            "type": ["object", "null"],
+            "properties": {
+              "date": {
+                "type": "string",
+                "format": "date",
+                "description": "ISO 8601 date of next payment"
+              },
+              "amount": {
+                "type": "number",
+                "description": "Expected amount of the next payment"
+              }
+            },
+            "required": ["date", "amount"],
+            "description": "Expected next payment, based on last payment and budget periodicity"
+          },
+          "teams": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "format": "uuid",
+                  "description": "Team unique identifier"
+                },
+                "name": {
+                  "type": "string",
+                  "description": "Team name"
+                }
+              },
+              "required": ["id", "name"]
+            },
+            "description": "Teams the application is assigned to"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "status",
+          "budget",
+          "createdAt",
+          "owner",
+          "nextRenewalDate",
+          "balance",
+          "nextPayment",
+          "teams"
+        ]
+      },
+      "Budget": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": ["soft", "fixed", "noBudget"],
+            "description": "Budget type"
+          },
+          "limit": {
+            "type": ["number", "null"],
+            "description": "Budget limit amount for the given period"
+          },
+          "currency": {
+            "type": "string",
+            "description": "ISO 4217 currency code"
+          },
+          "periodicity": {
+            "type": ["string", "null"],
+            "enum": ["week", "month", "quarter", "year", null],
+            "description": "Periodicity of the budget"
+          }
+        },
+        "required": ["type", "limit", "currency", "periodicity"]
+      },
+      "Transaction": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Transaction unique identifier",
+            "example": "123e4567-e89b-12d3-a456-426614174000"
+          },
+          "amount": {
+            "type": "number",
+            "description": "Transaction amount in the account currency. Negative for debits, positive for credits.",
+            "example": -100.01
+          },
+          "currency": {
+            "type": "string",
+            "enum": ["GBP", "EUR", "USD"],
+            "description": "Currency of the account.",
+            "example": "EUR"
+          },
+          "localAmount": {
+            "type": "number",
+            "description": "Transaction amount in the currency of the payment, if different from the account currency. Negative for debits, positive for credits.",
+            "example": -114.02
+          },
+          "localCurrency": {
+            "type": "string",
+            "description": "Currency of the payment, if different from the account currency.",
+            "example": "USD"
+          },
+          "accountType": {
+            "type": "string",
+            "enum": ["application", "saasMain", "spend", "others"],
+            "description": "Type of the account that the transaction belongs to",
+            "x-enum-descriptions": {
+              "application": "Application with fixed budget",
+              "saasMain": "Application with soft budget, and other transactions on the main SaaS Management account",
+              "spend": "Spend Management account",
+              "others": "Other account"
+            }
+          },
+          "description": {
+            "type": "string",
+            "description": "Description of the transaction"
+          },
+          "comment": {
+            "type": "string",
+            "description": "Comment of the transaction"
+          },
+          "application": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "format": "uuid",
+                "description": "Application unique identifier",
+                "example": "123e4567-e89b-12d3-a456-426614174000"
+              },
+              "name": {
+                "type": "string"
+              }
+            },
+            "required": ["id", "name"],
+            "description": "Application that the transaction belongs to, if applicable"
+          },
+          "authorizedAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "ISO 8601 timestamp of transaction authorization (when it occurred)",
+            "example": "2026-01-01T00:00:00Z"
+          },
+          "settledAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "ISO 8601 timestamp of transaction settlement (when it got confirmed)",
+            "example": "2026-01-01T00:00:00Z"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "cardSend",
+              "cardReceive",
+              "transferSend",
+              "transferReceive",
+              "applicationTopUp",
+              "applicationFlush",
+              "other"
+            ],
+            "description": "Type of the transaction"
+          },
+          "card": {
+            "type": ["object", "null"],
+            "properties": {
+              "id": {
+                "type": "string",
+                "format": "uuid",
+                "description": "Card unique identifier",
+                "example": "123e4567-e89b-12d3-a456-426614174000"
+              },
+              "name": {
+                "type": ["string", "null"],
+                "description": "Name of the card, only for Spend Management cards",
+                "example": "Coffee Card"
+              },
+              "type": {
+                "type": "string",
+                "enum": ["saasMain", "saasSupplementary", "spend"],
+                "description": "Type of the card.\n\n- `saasMain`: Main card for SaaS applications\n- `saasSupplementary`: Supplementary card for SaaS applications\n- `spend`: Spend Management card",
+                "example": "saasMain"
+              },
+              "number": {
+                "type": "string",
+                "description": "Last 4 digits of the card number",
+                "example": "1234"
+              },
+              "owner": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "format": "uuid",
+                    "description": "ID of the card owner",
+                    "example": "123e4567-e89b-12d3-a456-426614174000"
+                  },
+                  "name": {
+                    "type": "string",
+                    "description": "Name of the card owner",
+                    "example": "John Doe"
+                  }
+                },
+                "required": ["id", "name"]
+              },
+              "status": {
+                "type": "string",
+                "enum": ["pendingReview", "inactive", "active", "disabled", "failed", "cancelled", "expired"],
+                "description": "Status of the card",
+                "example": "active"
+              },
+              "tags": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "description": "Tags of the card",
+                "example": ["AI Expenses", "Variable Expenses"]
+              }
+            },
+            "required": ["id", "name", "type", "number", "owner", "status", "tags"],
+            "description": "Card that the transaction belongs to, if it's a card transaction"
+          },
+          "hasInvoice": {
+            "type": "boolean",
+            "description": "Whether the transaction has an invoice uploaded. You can download the invoice from the v0/transactions/{id}/invoice-url endpoint"
+          },
+          "invoiceDetails": {
+            "type": ["object", "null"],
+            "properties": {
+              "number": {
+                "type": ["string", "null"],
+                "description": "Invoice number extracted from the invoice, if available",
+                "example": "INV-2026-0042"
+              },
+              "date": {
+                "type": ["string", "null"],
+                "format": "date",
+                "description": "ISO 8601 date the invoice was issued, if available",
+                "example": "2026-01-15"
+              },
+              "vat": {
+                "type": ["object", "null"],
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "Name of the VAT rate applied to this invoice",
+                    "example": "Standard rate - 21%"
+                  },
+                  "rate": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 1,
+                    "description": "VAT rate applied to this invoice, as a fraction between 0 and 1",
+                    "example": 0.21
+                  }
+                },
+                "required": ["name", "rate"],
+                "description": "VAT applied to this invoice, if set"
+              }
+            },
+            "required": ["number", "date", "vat"],
+            "description": "Invoice details extracted by the invoice manager, only available for confirmed invoices"
+          },
+          "accounting": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "field": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "format": "uuid",
+                      "description": "Id of the accounting field, internal of cledara. Useful in case of renames."
+                    },
+                    "name": {
+                      "type": "string",
+                      "description": "Name of the accounting field"
+                    }
+                  },
+                  "required": ["id", "name"]
+                },
+                "value": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "type": "boolean"
+                    },
+                    {
+                      "type": "string",
+                      "format": "date",
+                      "description": "ISO 8601 date"
+                    }
+                  ],
+                  "description": "Value of this field for this transaction. External id for records."
+                },
+                "name": {
+                  "type": "string",
+                  "description": "Name of the value, only filled for records."
+                }
+              },
+              "required": ["field", "value"]
+            },
+            "description": "Accounting fields and values for this transaction. Empty values are omitted."
+          }
+        },
+        "required": [
+          "id",
+          "amount",
+          "currency",
+          "accountType",
+          "description",
+          "authorizedAt",
+          "type",
+          "card",
+          "hasInvoice",
+          "invoiceDetails",
+          "accounting"
+        ]
+      }
+    },
+    "parameters": {}
+  },
+  "paths": {
+    "/v0/applications": {
+      "get": {
+        "summary": "List applications in the workspace",
+        "tags": ["Applications"],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "headers": {
+              "X-RateLimit-Limit": {
+                "schema": {
+                  "type": "number",
+                  "description": "The maximum number of requests per time window",
+                  "example": 1000
+                },
+                "required": true,
+                "description": "The maximum number of requests per time window"
+              },
+              "X-RateLimit-Remaining": {
+                "schema": {
+                  "type": "number",
+                  "description": "The number of requests remaining in the current time window",
+                  "example": 0
+                },
+                "required": true,
+                "description": "The number of requests remaining in the current time window"
+              },
+              "X-RateLimit-Reset": {
+                "schema": {
+                  "type": "number",
+                  "description": "The timestamp of the next reset",
+                  "example": 1719859200
+                },
+                "required": true,
+                "description": "The timestamp of the next reset"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Application"
+                  },
+                  "description": "List of applications"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid API key"
+          },
+          "403": {
+            "description": "Insufficient privileges for this account"
+          },
+          "429": {
+            "description": "Too many requests",
+            "headers": {
+              "Retry-After": {
+                "schema": {
+                  "type": "number",
+                  "description": "The number of seconds to wait before the next request",
+                  "example": 10
+                },
+                "required": true,
+                "description": "The number of seconds to wait before the next request"
+              },
+              "X-RateLimit-Remaining": {
+                "schema": {
+                  "type": "number",
+                  "description": "The number of requests remaining in the current time window",
+                  "example": 0
+                },
+                "required": true,
+                "description": "The number of requests remaining in the current time window"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v0/transactions": {
+      "get": {
+        "summary": "List transactions in a workspace",
+        "tags": ["Transactions"],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Fetch transactions that occurred after this date RFC 3339 timestamp",
+              "example": "2026-01-01T00:00:00Z"
+            },
+            "required": false,
+            "description": "Fetch transactions that occurred after this date RFC 3339 timestamp",
+            "name": "from",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Fetch transactions that occurred before this date RFC 3339 timestamp",
+              "example": "2026-01-31T23:59:59Z"
+            },
+            "required": false,
+            "description": "Fetch transactions that occurred before this date RFC 3339 timestamp",
+            "name": "to",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "format": "uuid",
+                "description": "Application unique identifier",
+                "example": "123e4567-e89b-12d3-a456-426614174000"
+              },
+              "description": "Fetch transactions for these application IDs"
+            },
+            "required": false,
+            "description": "Fetch transactions for these application IDs",
+            "name": "applicationIds",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": ["integer", "null"],
+              "minimum": 0,
+              "description": "Offset for pagination",
+              "example": 0
+            },
+            "required": false,
+            "description": "Offset for pagination",
+            "name": "offset",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "headers": {
+              "X-RateLimit-Limit": {
+                "schema": {
+                  "type": "number",
+                  "description": "The maximum number of requests per time window",
+                  "example": 1000
+                },
+                "required": true,
+                "description": "The maximum number of requests per time window"
+              },
+              "X-RateLimit-Remaining": {
+                "schema": {
+                  "type": "number",
+                  "description": "The number of requests remaining in the current time window",
+                  "example": 0
+                },
+                "required": true,
+                "description": "The number of requests remaining in the current time window"
+              },
+              "X-RateLimit-Reset": {
+                "schema": {
+                  "type": "number",
+                  "description": "The timestamp of the next reset",
+                  "example": 1719859200
+                },
+                "required": true,
+                "description": "The timestamp of the next reset"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "transactions": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Transaction"
+                      },
+                      "description": "List of transactions"
+                    },
+                    "nextOffset": {
+                      "type": ["integer", "null"],
+                      "minimum": 0,
+                      "description": "Offset for the next page, null if there is no next page"
+                    },
+                    "hasMore": {
+                      "type": "boolean",
+                      "description": "Whether there are more transactions to fetch"
+                    },
+                    "totalCount": {
+                      "type": "integer",
+                      "minimum": 0,
+                      "description": "Total number of transactions"
+                    }
+                  },
+                  "required": ["transactions", "nextOffset", "hasMore", "totalCount"]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid API key"
+          },
+          "403": {
+            "description": "Insufficient privileges for this account"
+          },
+          "429": {
+            "description": "Too many requests",
+            "headers": {
+              "Retry-After": {
+                "schema": {
+                  "type": "number",
+                  "description": "The number of seconds to wait before the next request",
+                  "example": 10
+                },
+                "required": true,
+                "description": "The number of seconds to wait before the next request"
+              },
+              "X-RateLimit-Remaining": {
+                "schema": {
+                  "type": "number",
+                  "description": "The number of requests remaining in the current time window",
+                  "example": 0
+                },
+                "required": true,
+                "description": "The number of requests remaining in the current time window"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v0/transactions/{transactionId}/invoice-url": {
+      "get": {
+        "summary": "Get the URL to download a transaction invoice",
+        "tags": ["Transactions"],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "description": "Transaction unique identifier",
+              "example": "123e4567-e89b-12d3-a456-426614174000"
+            },
+            "required": true,
+            "description": "Transaction unique identifier",
+            "name": "transactionId",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "headers": {
+              "X-RateLimit-Limit": {
+                "schema": {
+                  "type": "number",
+                  "description": "The maximum number of requests per time window",
+                  "example": 1000
+                },
+                "required": true,
+                "description": "The maximum number of requests per time window"
+              },
+              "X-RateLimit-Remaining": {
+                "schema": {
+                  "type": "number",
+                  "description": "The number of requests remaining in the current time window",
+                  "example": 0
+                },
+                "required": true,
+                "description": "The number of requests remaining in the current time window"
+              },
+              "X-RateLimit-Reset": {
+                "schema": {
+                  "type": "number",
+                  "description": "The timestamp of the next reset",
+                  "example": 1719859200
+                },
+                "required": true,
+                "description": "The timestamp of the next reset"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "invoiceUrl": {
+                      "type": "string",
+                      "format": "uri",
+                      "description": "URL to the invoice, valid for 5 minutes"
+                    }
+                  },
+                  "required": ["invoiceUrl"]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid API key"
+          },
+          "403": {
+            "description": "Insufficient privileges for this account"
+          },
+          "404": {
+            "description": "Record not found"
+          },
+          "429": {
+            "description": "Too many requests",
+            "headers": {
+              "Retry-After": {
+                "schema": {
+                  "type": "number",
+                  "description": "The number of seconds to wait before the next request",
+                  "example": 10
+                },
+                "required": true,
+                "description": "The number of seconds to wait before the next request"
+              },
+              "X-RateLimit-Remaining": {
+                "schema": {
+                  "type": "number",
+                  "description": "The number of requests remaining in the current time window",
+                  "example": 0
+                },
+                "required": true,
+                "description": "The number of requests remaining in the current time window"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "webhooks": {}
+}

@@ -1,0 +1,180 @@
+generated: '2026-09-05'
+method: searched
+source: >-
+  https://api-docs.cledara.com/ and its spec at
+  https://cledara-public.s3.eu-west-2.amazonaws.com/public-api/open-api.json,
+  https://www.cledara.com/blog/introducing-the-cledara-api, plus live probes of
+  https://api.cledara.com/v0/applications on 2026-09-05
+provider: Cledara
+providerId: cledara
+api: Cledara API
+base_url: https://api.cledara.com
+summary: >-
+  Cledara's public API is a small, entirely READ-ONLY REST surface: three GET operations,
+  no writes of any kind. That single fact settles most of the runtime-semantics questions
+  below — idempotency, reversibility and dry-run are not applicable rather than missing.
+auth:
+  style: bearer-api-key
+  header: Authorization
+  format: 'Bearer <api-key>'
+  scopes: false
+  detail: authentication/cledara-authentication.yml
+versioning:
+  style: path-prefix
+  current: v0
+  example: https://api.cledara.com/v0/applications
+  info_version: v1
+  note: >-
+    The spec's info.version is "v1" while every path is prefixed /v0/ — the document version
+    and the URL version disagree. Treat the path prefix as authoritative. A v0 prefix is the
+    provider signalling the surface is not yet frozen; no stability or deprecation policy
+    is published to say what a move to v1 would mean for callers.
+  breaking_change_policy: none published
+pagination:
+  supported: partial
+  style: offset
+  applies_to:
+    - GET /v0/transactions
+  not_supported_on:
+    - GET /v0/applications
+  request_params:
+    - name: offset
+      in: query
+      type: integer
+      minimum: 0
+      required: false
+      description: Zero-based offset into the result set.
+  response_fields:
+    - name: transactions
+      description: The page of records.
+    - name: nextOffset
+      description: Offset to pass on the next call; null when there is no next page.
+    - name: hasMore
+      description: Boolean, whether more records exist.
+    - name: totalCount
+      description: Total number of matching transactions.
+  page_size:
+    documented: false
+    note: No limit/per_page parameter exists and no page size is documented; the server decides.
+  note: >-
+    GET /v0/applications returns a bare JSON array with no envelope and no pagination
+    controls at all. An agent iterating a large workspace has no way to page it.
+filtering:
+  - operation: GET /v0/transactions
+    params:
+      - name: from
+        type: string
+        format: date-time
+        description: RFC 3339 timestamp; return transactions that occurred after this date.
+      - name: to
+        type: string
+        format: date-time
+        description: RFC 3339 timestamp; return transactions that occurred before this date.
+      - name: applicationIds
+        type: array of uuid
+        description: Restrict to these application ids.
+sorting:
+  supported: false
+  note: No sort parameter is exposed on any operation.
+field_expansion:
+  supported: false
+  note: >-
+    No expand/fields/include parameters. Related objects are inlined at a fixed depth —
+    a Transaction always carries its card, application summary and accounting rows.
+metadata:
+  custom_fields: partial
+  note: >-
+    Transaction.accounting[] carries the workspace's own accounting fields as
+    {field:{id,name}, value, name} rows, with the field id explicitly documented as stable
+    across renames. That is the only customer-extensible data in the contract.
+identifiers:
+  style: uuid
+  prefixed: false
+  note: Every id is a bare RFC 4122 UUID with no type prefix, so an id is not self-describing.
+request_id_tracing:
+  supported: false
+  note: >-
+    No request-id request or response header is documented or observed. Error bodies carry
+    error.errorId, a per-occurrence integer, which is the only correlation handle available
+    and only exists on failures.
+error_envelope:
+  format: vendor-json
+  rfc9457: false
+  detail: errors/cledara-problem-types.yml
+rate_limit_signaling:
+  documented: true
+  limit: 120 requests per minute per API key
+  headers:
+    - X-RateLimit-Limit
+    - X-RateLimit-Remaining
+    - X-RateLimit-Reset
+    - Retry-After
+  exhausted_status: 429
+  declared_in_spec: true
+  note: >-
+    The rate-limit headers are declared as required response headers on every 200 AND on
+    every 429 in the OpenAPI itself, not just in prose. Detail in rate-limits/cledara-rate-limits.yml.
+content_negotiation:
+  request: none (no request bodies exist)
+  response: application/json
+  compression: not documented
+dates_and_money:
+  timestamps: RFC 3339 / ISO 8601 (authorizedAt, settledAt, createdAt)
+  dates: ISO 8601 calendar dates (nextRenewalDate, invoiceDetails.date)
+  currency: ISO 4217 codes; account currency constrained to GBP, EUR, USD
+  amounts: >-
+    Decimal numbers, not minor units. Sign carries direction — negative is a debit,
+    positive a credit. localAmount/localCurrency carry the original payment currency
+    when it differs from the account currency; no FX rate is exposed.
+idempotency:
+  coverage: na
+  supported: false
+  scope: []
+  header: null
+  note: >-
+    The API has no mutating operations — all three published endpoints are GET. There is no
+    replay hazard to protect against, so idempotency is not applicable rather than absent.
+    If Cledara ships writes (the launch post says "more endpoints are on the way"), this
+    field must be re-measured; do not carry `na` forward past the next write endpoint.
+reversibility:
+  grade: na
+  write_surface: false
+  operations: []
+  note: >-
+    Read-only API: nothing an agent calls here can be taken back because nothing it calls
+    changes state. No cancel, refund, void, reverse or restore operation exists, and none is
+    needed. Cledara's product does have irreversible actions (cancelling a subscription,
+    freezing a card), but they are not exposed through the public API.
+dry_run_mode:
+  supported: na
+  note: Read-only surface; every call is already side-effect free.
+bulk_operations:
+  supported: false
+  note: >-
+    No batch endpoint. GET /v0/transactions with a wide from/to window plus offset paging is
+    the bulk-export path; GET /v0/applications returns the whole set in one array.
+webhooks:
+  supported: false
+  note: >-
+    No webhook, event or streaming surface is published — no AsyncAPI, no event catalog, no
+    subscription endpoint. Integrations poll. This is the largest single gap for an agent
+    that wants to react to a renewal or a transaction rather than ask for one.
+caching:
+  documented: false
+  observed: 'Responses on api.cledara.com return Cache-Control: no-store, no-cache on errors; no ETag or If-None-Match support is documented.'
+short_lived_resources:
+  - resource: invoiceUrl
+    operation: GET /v0/transactions/{transactionId}/invoice-url
+    ttl: 5 minutes
+    source: openapi/cledara-api-openapi.json (description "URL to the invoice, valid for 5 minutes")
+    note: >-
+      An agent must download within the window; the URL cannot be stored or handed off later.
+cross_links:
+  authentication: authentication/cledara-authentication.yml
+  errors: errors/cledara-problem-types.yml
+  rate_limits: rate-limits/cledara-rate-limits.yml
+  lifecycle: lifecycle/cledara-lifecycle.yml
+  data_model: data-model/cledara-data-model.yml
+maintainers:
+  - FN: Kin Lane
+    email: kinlane@gmail.com

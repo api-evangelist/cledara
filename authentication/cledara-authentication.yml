@@ -1,0 +1,100 @@
+generated: '2026-09-05'
+method: searched
+source: >-
+  https://api-docs.cledara.com/ (info.description of openapi/cledara-api-openapi.json),
+  https://www.cledara.com/blog/introducing-the-cledara-api,
+  https://data.cledara.com/.well-known/oauth-authorization-server (probed 2026-09-05)
+provider: Cledara
+providerId: cledara
+summary: >-
+  Two unrelated authentication models, one per surface. The workspace REST API uses a
+  static Bearer API key minted in the Cledara web app; the market-data MCP endpoint uses
+  OAuth 2.1 with dynamic client registration and PKCE. Neither surface issues the other's
+  credential.
+schemes:
+  - id: BearerAuth
+    api: Cledara API
+    type: http
+    scheme: bearer
+    in: header
+    header: Authorization
+    format: 'Authorization: Bearer <your-api-key>'
+    description: API key issued from the Cledara Web Application.
+    source: openapi/cledara-api-openapi.json#/components/securitySchemes/BearerAuth
+    applied_to: all 3 operations (declared per-operation; the spec sets no top-level security)
+    provisioning:
+      self_serve: true
+      location: Cledara web app → Settings → Profile Details → API Keys
+      docs: https://www.cledara.com/blog/introducing-the-cledara-api
+      requires_sales_contact: false
+    permission_model: >-
+      "Each key grants the same level of access as the user who created it." There are no
+      scopes, no per-key permission grants and no service accounts — the key inherits the
+      creating user's role, which makes key custody the whole authorization story. Cledara's
+      own docs say to treat it like a password.
+    rotation:
+      documented: false
+      note: No published rotation, expiry or revocation policy for API keys was found.
+    observed_failures:
+      - status: 401
+        trigger: no Authorization header
+        body: '{"message":"Missing or invalid Authorization header. Expected: Bearer <token>","error":{"method":"GET","url":"/v0/applications","status":401,"cledaraType":"cledaraError","errorId":29317748}}'
+        probed: '2026-09-05'
+      - status: 401
+        trigger: syntactically valid but unknown bearer token
+        probed: '2026-09-05'
+      - status: 403
+        trigger: authenticated principal lacks privileges for the account
+        source: openapi/cledara-api-openapi.json (declared, not probed)
+  - id: DataHubOAuth
+    api: Cledara SaaS Market Data Hub MCP Server
+    type: oauth2
+    in: header
+    header: Authorization
+    description: OAuth 2.1 authorization-code (PKCE S256) or client-credentials, per RFC 8414 metadata.
+    source: https://data.cledara.com/.well-known/oauth-authorization-server
+    issuer: https://data.cledara.com
+    authorization_endpoint: https://data.cledara.com/authorize
+    token_endpoint: https://data.cledara.com/oauth/token
+    registration_endpoint: https://data.cledara.com/oauth/register
+    revocation_endpoint: https://data.cledara.com/oauth/revoke
+    grant_types:
+      - authorization_code
+      - client_credentials
+    pkce:
+      required_methods:
+        - S256
+    token_endpoint_auth_methods:
+      - client_secret_post
+      - none
+    scopes:
+      - mcp:read
+    provisioning:
+      self_serve: true
+      mechanism: dynamic client registration (RFC 7591) at https://data.cledara.com/oauth/register
+      requires_sales_contact: false
+      note: >-
+        DCR plus a public-client auth method means an MCP client can onboard itself with no
+        human provisioning step — the strongest agent-onboarding signal on this provider.
+    observed_failures:
+      - status: 401
+        trigger: 'POST /mcp tools/list with no token'
+        body: '{"error":"Unauthorized"}'
+        probed: '2026-09-05'
+        note: No WWW-Authenticate challenge is returned and no /.well-known/oauth-protected-resource is served, so RFC 9728 resource-metadata discovery does not work; a client must know to look for the same-origin authorization-server document.
+not_supported:
+  - mutualTLS
+  - openIdConnect
+  - apiKey (query or cookie)
+  - HMAC request signing
+  - basic auth
+gaps:
+  - The REST API has no OAuth, no scopes and no delegated-access story; every integration
+    runs as a human user's full permissions.
+  - No documented key rotation, expiry or revocation for the REST API key.
+  - The MCP endpoint returns a bare 401 with no WWW-Authenticate header and serves no
+    /.well-known/oauth-protected-resource, so a conforming MCP client cannot auto-discover
+    its authorization server from the challenge.
+maintainers:
+  - FN: Kin Lane
+    email: kinlane@gmail.com

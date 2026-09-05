@@ -1,0 +1,88 @@
+generated: '2026-09-05'
+method: probed
+source: https://data.cledara.com/mcp
+provider: Cledara
+providerId: cledara
+name: Cledara SaaS Market Data Hub MCP Server
+description: >-
+  A hosted, remote MCP endpoint served by Cledara on the SaaS Market Data Hub host
+  (data.cledara.com). It is the agent-facing door onto the same public dataset the
+  Data Hub renders as HTML — market share, adoption, spend and rank movement across
+  9,300+ SaaS and AI products, built from aggregated anonymized purchasing signals
+  from companies that pay for software through Cledara. It is a DIFFERENT product
+  from the Cledara workspace API at api.cledara.com, which is REST-only and has no
+  MCP surface.
+status: live
+deployment:
+  mode: remote
+  endpoint: https://data.cledara.com/mcp
+  auth: oauth
+  verified: probed
+transport: streamable-http
+evidence:
+  - probe: GET https://data.cledara.com/mcp
+    fetched: '2026-09-05'
+    http_status: 405
+    body: '{"error":"SSE sessions not supported. Use POST for all requests."}'
+    note: >-
+      A 405 naming SSE and POST is an MCP transport speaking for itself; a generic
+      404 SPA shell is what every other path on this host returns.
+  - probe: 'POST https://data.cledara.com/mcp {"jsonrpc":"2.0","id":1,"method":"tools/list"}'
+    fetched: '2026-09-05'
+    http_status: 401
+    body: '{"error":"Unauthorized"}'
+    note: >-
+      The live tool list is auth-gated. No WWW-Authenticate challenge and no
+      /.well-known/oauth-protected-resource are served, so a client must discover
+      the authorization server from the same-origin RFC 8414 document below.
+  - probe: GET https://data.cledara.com/.well-known/oauth-authorization-server
+    fetched: '2026-09-05'
+    http_status: 200
+    file: ../well-known/cledara-data-oauth-authorization-server.json
+authorization:
+  metadata_document: https://data.cledara.com/.well-known/oauth-authorization-server
+  issuer: https://data.cledara.com
+  authorization_endpoint: https://data.cledara.com/authorize
+  token_endpoint: https://data.cledara.com/oauth/token
+  registration_endpoint: https://data.cledara.com/oauth/register
+  revocation_endpoint: https://data.cledara.com/oauth/revoke
+  grant_types_supported:
+    - authorization_code
+    - client_credentials
+  code_challenge_methods_supported:
+    - S256
+  token_endpoint_auth_methods_supported:
+    - client_secret_post
+    - none
+  scopes_supported:
+    - mcp:read
+  dynamic_client_registration: true
+  note: >-
+    Dynamic client registration (RFC 7591) plus PKCE S256 and a public-client option
+    ("none") is the shape an MCP client needs to self-onboard without a human
+    provisioning credentials first.
+tools:
+  status: not-enumerated
+  reason: >-
+    tools/list returns 401 without an access token, and Cledara publishes no tool
+    catalog in prose. The single declared scope is mcp:read, so the surface is
+    read-only, but tool names and inputSchemas require authenticated introspection.
+    NOT DERIVED FROM THE REST SPEC — the MCP server fronts the public market dataset,
+    not the workspace API, so the three api.cledara.com operations are not its tools.
+related_surfaces:
+  - name: Cledara SaaS Market Data Hub (human)
+    url: https://data.cledara.com/
+  - name: Data Hub llms.txt
+    url: https://data.cledara.com/llms.txt
+  - name: Ask Cledara (natural-language query over the same dataset)
+    url: https://data.cledara.com/ask
+  - name: Market Movements Atom feed
+    url: https://data.cledara.com/feed.xml
+  - name: Bulk/API access to the dataset
+    url: 'mailto:b@cledara.com?subject=API%20Access%20Request'
+    note: >-
+      The Data Hub's own "API Access" link is a mailto, not a self-serve signup — the
+      dataset's non-MCP programmatic access is sales-gated.
+maintainers:
+  - FN: Kin Lane
+    email: kinlane@gmail.com

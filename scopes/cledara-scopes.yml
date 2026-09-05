@@ -1,0 +1,39 @@
+generated: '2026-09-05'
+method: probed
+source: https://data.cledara.com/.well-known/oauth-authorization-server
+provider: Cledara
+providerId: cledara
+description: >-
+  OAuth scopes Cledara publishes. Exactly one, and it belongs to the market-data MCP
+  endpoint, not to the workspace REST API — that surface authenticates with an unscoped
+  Bearer API key that inherits the creating user's full permissions and therefore has no
+  scope vocabulary at all.
+api: Cledara SaaS Market Data Hub MCP Server
+authorization_server: https://data.cledara.com
+flows:
+  - type: authorization_code
+    authorizationUrl: https://data.cledara.com/authorize
+    tokenUrl: https://data.cledara.com/oauth/token
+    pkce: S256
+  - type: client_credentials
+    tokenUrl: https://data.cledara.com/oauth/token
+scopes:
+  - name: 'mcp:read'
+    description: >-
+      Read access to the Cledara SaaS Market Data Hub through the MCP endpoint at
+      https://data.cledara.com/mcp. Declared in scopes_supported of the RFC 8414
+      authorization-server metadata; Cledara publishes no prose scope reference, so the
+      description here is derived from the scope name plus the endpoint it guards.
+    grants: read
+    surface: https://data.cledara.com/mcp
+scope_count: 1
+docs: null
+notes:
+  - No write scope is published, which is consistent with a read-only public dataset.
+  - No scope reference page exists on the provider's site; the authorization-server
+    metadata document is the only published source.
+  - The REST API at api.cledara.com declares only an http/bearer securityScheme and
+    therefore contributes no scopes.
+maintainers:
+  - FN: Kin Lane
+    email: kinlane@gmail.com

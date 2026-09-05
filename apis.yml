@@ -9,7 +9,7 @@ deliveryModel:
   label: Hosted service · you call their endpoint
   confidence: medium
   source:
-  - pricing
+    - pricing
   generated: '2026-08-28'
   method: derived
 accessModel:
@@ -21,14 +21,14 @@ accessModel:
   label: Freemium
   confidence: medium
   source:
-  - plans
+    - plans
   generated: '2026-07-22'
   method: derived
 created: '2026-03-16'
-modified: '2026-04-26'
+modified: '2026-09-05'
 type: Index
 access: 3rd-Party
-position: Consuming
+position: Producing
 specificationVersion: '0.23'
 image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/cledara.png
 kind: company
@@ -39,14 +39,16 @@ tags:
   - Spend Management
   - Subscription Management
   - Virtual Cards
+  - Expense Management
+  - FinOps
+  - MCP
+  - Market Data
 description: >-
-  Cledara is a SaaS management platform that helps companies manage, control,
-  and optimize software spending. The platform provides visibility into all
-  software subscriptions, virtual payment cards with per-vendor spending
-  limits, approval workflows, vendor renewal tracking, usage analytics, and
-  accounting and ERP integrations. Cledara serves finance, IT, procurement,
-  and operations teams across companies looking to consolidate SaaS purchasing
-  and reduce spend leakage.
+  Cledara is a SaaS management platform that helps companies manage, control, and optimize software spending.
+  The platform provides visibility into all software subscriptions, virtual payment cards with per-vendor
+  spending limits, approval workflows, vendor renewal tracking, usage analytics, and accounting and ERP
+  integrations. Cledara serves finance, IT, procurement, and operations teams across companies looking
+  to consolidate SaaS purchasing and reduce spend leakage.
 apis:
   - aid: cledara:cledara-api
     name: Cledara API
@@ -54,20 +56,82 @@ apis:
       - Finance
       - SaaS Management
       - Subscription Management
-    humanURL: https://docs.cledara.com/
+    humanURL: https://api-docs.cledara.com/
     properties:
-      - url: https://docs.cledara.com/
-        type: Documentation
-      - url: https://www.cledara.com/
-        type: Website
+      - type: Documentation
+        url: https://api-docs.cledara.com/
+      - type: APIReference
+        url: https://api-docs.cledara.com/
+      - type: GettingStarted
+        url: https://www.cledara.com/blog/introducing-the-cledara-api
+      - type: OpenAPI
+        url: openapi/cledara-api-openapi.json
+      - type: Overlay
+        url: overlays/cledara-api-overlay.yaml
+      - type: Authentication
+        url: authentication/cledara-authentication.yml
+      - type: Conventions
+        url: conventions/cledara-conventions.yml
+      - type: ErrorCatalog
+        url: errors/cledara-problem-types.yml
+      - type: DataModel
+        url: data-model/cledara-data-model.yml
+      - type: RateLimits
+        url: rate-limits/cledara-rate-limits.yml
+      - type: Lifecycle
+        url: lifecycle/cledara-lifecycle.yml
+      - type: AgentSkill
+        url: skills/_index.yml
+      - type: Website
+        url: https://www.cledara.com/
     description: >-
-      The Cledara API provides programmatic access to SaaS subscription
-      records, vendors, virtual cards, transactions, approval requests,
-      and spend analytics. The API follows REST conventions, uses JSON
-      payloads, supports OAuth-based authentication, and offers webhook
-      delivery for events such as new subscriptions, card transactions,
-      and approval state changes. A sandbox environment is available
-      for integration testing.
+      Cledara's public REST API over your own workspace. As of 2026-09-05 it is three read-only GET operations:
+      list applications (software subscriptions with status, owner, teams, budget, balance, next renewal
+      date and expected next payment), list transactions (card payments, transfers and account movements,
+      filterable by RFC 3339 date window and application id, paged by offset), and fetch a five-minute
+      download URL for a transaction's invoice. Authentication is a Bearer API key self-served in the
+      Cledara app that carries the creating user's permissions; there are no scopes. Rate limited to 120
+      requests per minute per key with X-RateLimit-* headers declared in the contract. There are no write
+      operations, no webhooks, no sandbox and no SDKs. The API is included at no extra cost on every Cledara
+      plan.
+    baseURL: https://api.cledara.com
+    image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/cledara.png
+  - aid: cledara:cledara-saas-market-data-hub
+    name: Cledara SaaS Market Data Hub
+    tags:
+      - Market Data
+      - SaaS Management
+      - MCP
+      - Software Spending
+      - Finance
+    humanURL: https://data.cledara.com/
+    baseURL: https://data.cledara.com
+    description: >-
+      Cledara's public SaaS and AI market dataset — market share, adoption, rank movement and spend benchmarks
+      across 9,300+ software products, built from aggregated anonymized purchasing signals from companies
+      that pay for software through Cledara. It is published as browsable pages, an Atom feed of dated
+      market movements, a natural-language query page, and a remote MCP endpoint at https://data.cledara.com/mcp.
+      The MCP endpoint is OAuth-protected: tools/list returns 401 without a token, and the host serves
+      a complete RFC 8414 authorization-server metadata document with dynamic client registration, PKCE
+      S256 and a single mcp:read scope. Bulk non-MCP programmatic access is sales-gated behind a mailto.
+      This is a different product from the workspace REST API at api.cledara.com and the two share no
+      data and no credential.
+    properties:
+      - type: Website
+        url: https://data.cledara.com/
+      - type: MCPServer
+        url: mcp/cledara-mcp.yml
+      - type: ToolCrosswalk
+        url: mcp/cledara-tool-crosswalk.yml
+      - type: Authentication
+        url: authentication/cledara-authentication.yml
+      - type: OAuthScopes
+        url: scopes/cledara-scopes.yml
+      - type: WellKnown
+        url: well-known/cledara-well-known.yml
+      - type: LLMsTxt
+        url: https://data.cledara.com/llms.txt
+    image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/cledara.png
 common:
   - type: TrustCenter
     url: security/cledara-trust-center.yml
@@ -78,34 +142,133 @@ common:
   - type: Website
     url: https://www.cledara.com/
   - type: Documentation
-    url: https://docs.cledara.com/
-  - type: Help Center
+    url: https://api-docs.cledara.com/
+  - type: HelpCenter
     url: https://help.cledara.com/
   - type: Pricing
     url: https://www.cledara.com/pricing
   - type: PrivacyPolicy
     url: https://www.cledara.com/privacy-policy
   - type: TermsOfService
-    url: https://www.cledara.com/terms-and-conditions
+    url: https://www.cledara.com/terms
   - type: LinkedIn
     url: https://www.linkedin.com/company/cledara/
   - type: Integrations
     url: https://www.cledara.com/integrations
   - url: https://www.cledara.com/blog
     type: Blog
+  - type: DeveloperPortal
+    url: https://api-docs.cledara.com/
+  - type: APIReference
+    url: https://api-docs.cledara.com/
+  - type: GettingStarted
+    url: https://www.cledara.com/blog/introducing-the-cledara-api
+  - type: Support
+    url: https://help.cledara.com/hc/
+  - type: SignUp
+    url: https://app.cledara.com/signup
+  - type: Login
+    url: https://app.cledara.com/login
+  - type: StatusPage
+    url: https://statuspage.cledara.com/
+  - type: ChangeLog
+    url: https://announcements.cledara.com/announcements
+  - type: BlogRSS
+    url: https://www.cledara.com/blog/rss.xml
+  - type: Compliance
+    url: conformance/cledara-conformance.yml
+  - type: Conformance
+    url: conformance/cledara-conformance.yml
+  - type: Lifecycle
+    url: lifecycle/cledara-lifecycle.yml
+  - type: Conventions
+    url: conventions/cledara-conventions.yml
+  - type: Authentication
+    url: authentication/cledara-authentication.yml
+  - type: OAuthScopes
+    url: scopes/cledara-scopes.yml
+  - type: ErrorCatalog
+    url: errors/cledara-problem-types.yml
+  - type: DataModel
+    url: data-model/cledara-data-model.yml
+  - type: RateLimits
+    url: rate-limits/cledara-rate-limits.yml
+  - type: Plans
+    url: plans/cledara-plans-pricing.yml
+  - type: Packages
+    url: packages/cledara-packages.yml
+  - type: LLMsTxt
+    url: llms/cledara-llms.txt
+  - type: WellKnown
+    url: well-known/cledara-well-known.yml
+  - type: MCPServer
+    url: mcp/cledara-mcp.yml
+  - type: AgentSkill
+    url: skills/_index.yml
+  - type: OpenAPI
+    url: openapi/cledara-api-openapi.json
+  - type: Overlay
+    url: overlays/cledara-api-overlay.yaml
+  - type: ChangeLog
+    url: changelog/cledara-changelog.yml
 integrations:
-  - name: Sign up now →
-  - name: Cledara
-  - name: G2
-  - name: Star
-  - name: Works with all tools
-  - name: chrome
-  - name: zafari
-  - name: edge
-  - name: firefox
-  - name: opera
-  - name: vivaldi
-  - name: Trivago
+  - name: Xero
+  - name: QuickBooks
+  - name: NetSuite
+  - name: Tripletex
+  - name: Gmail
+  - name: Microsoft 365
+  - name: Okta
+  - name: Google Workspace
+  - name: Slack
+  - name: CharlieHR
+  - name: BambooHR
+  - name: HiBob
+  - name: Personio
+  - name: AlexisHR
+  - name: Altera Payroll
+  - name: Breathe
+  - name: Ceridian Dayforce
+  - name: ChartHop
+  - name: ClayHR
+  - name: Freshteam
+  - name: Gusto
+  - name: HR Cloud
+  - name: HR Partner
+  - name: Humaans
+  - name: IntelliHR
+  - name: JumpCloud
+  - name: Justworks
+  - name: Kallidus
+  - name: Lano
+  - name: Lucca
+  - name: Namely
+  - name: Nmbrs
+  - name: Officient
+  - name: OneLogin
+  - name: Paychex
+  - name: Paylocity
+  - name: People HR
+  - name: Proliant
+  - name: Sage HR
+  - name: Sesame
+  - name: Square Payroll
+  - name: TriNet
+  - name: UKG
+  - name: Workday
+  - name: Zenefits
 maintainers:
   - FN: Kin Lane
     email: kinlane@gmail.com
+x-enrichment:
+  date: '2026-09-05'
+  status: enriched
+  artifacts_added: 24
+  pass: local-v3
+x-integrations-source:
+  url: https://www.cledara.com/integrations
+  fetched: '2026-09-05'
+  method: searched
+  note: >-
+    Replaces a scraped list that had captured page furniture ("Sign up now", "G2", "Star", browser names,
+    "Trivago") as integration names.

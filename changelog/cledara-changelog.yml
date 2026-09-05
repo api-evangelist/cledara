@@ -1,0 +1,98 @@
+generated: '2026-09-05'
+method: searched
+source: https://announcements.cledara.com/announcements
+provider: Cledara
+providerId: cledara
+name: Cledara Announcements
+url: https://announcements.cledara.com/announcements
+http_status: 200
+fetched: '2026-09-05'
+scheme: dated product announcements
+api_specific: false
+versioned: false
+feed: null
+note: >-
+  Cledara publishes a dated, tagged product announcements board covering the whole platform.
+  It is a real changelog and it is where the API launch was announced, but it is not an API
+  changelog — there is no per-release record of endpoint, schema or behaviour changes, and no
+  RSS/Atom feed for it. Entries below are the recent window as rendered on 2026-09-05, most
+  recent first.
+current_version: v0 (API path prefix; the announcements board itself is unversioned)
+entries:
+  - date: '2026-08-27'
+    title: The Cledara API is live
+    tags: [New Feature, Announcement]
+    breaking: false
+    additions:
+      - 'Public REST API launched with three read-only endpoints: applications, transactions, and transaction invoice URLs.'
+      - API keys self-served from Settings → Profile Details → API Keys.
+      - Included on every plan at no extra cost.
+    highlights: >-
+      Positioned explicitly for agents as well as developers — "your dashboard, your accounting
+      system, or your AI assistant (Claude, ChatGPT, or your agent of choice)" and "you do not
+      need a developer. Your AI coding agent reads the docs, takes an API key, and builds the
+      integration for you."
+    links:
+      - https://api-docs.cledara.com/
+      - https://www.cledara.com/blog/introducing-the-cledara-api
+  - date: '2026-05-21'
+    title: 'Invoice Manager: turn invoices into insights with AI'
+    tags: [New Feature, Announcement]
+    region: UK / EEA
+    breaking: false
+    additions:
+      - AI extraction of invoice number, date and VAT rate from uploaded invoices.
+      - Claimable VAT Breakdown chart in Reports and per-application historical spend.
+      - Auto-confirm for trusted applications.
+    api_impact: >-
+      Surfaces in the API as Transaction.invoiceDetails {number, date, vat}, documented as
+      "only available for confirmed invoices".
+  - date: '2026-02-09'
+    title: Card Limits for US customers
+    tags: [New Feature, Announcement]
+    region: USA
+    breaking: false
+    additions:
+      - Per-card maximum spend; transactions above the limit are declined automatically.
+    note: UK/EEA customers already had the equivalent via fixed/soft application budgets.
+  - date: '2026-02-05'
+    title: Manage your SaaS without leaving Slack
+    tags: [Announcement, New Feature]
+    breaking: false
+    additions:
+      - Slack bot for approval workflows and request handling, activated in Settings → Integrations.
+  - date: '2026-01-16'
+    title: 'Spend Reimbursements: manage out-of-pocket expenses'
+    tags: [New Feature, Announcement]
+    plans: [Premium, Pro]
+    breaking: false
+    additions:
+      - Employee reimbursement claims, finance approval, and payment from Cledara funds.
+      - Receipt capture and accounting sync.
+  - date: '2025-12-09'
+    title: 'AI Dashboard: real-time visibility over your AI spend'
+    tags: [New Feature, Announcement]
+    breaking: false
+    additions:
+      - Unified tracking and analysis of usage-based AI spend.
+  - date: '2025-11-19'
+    title: 'Apple Pay: your iPhone is now your Cledara Spend card'
+    tags: [New Feature, Announcement]
+    breaking: false
+  - date: '2025-08-20'
+    title: 'New Accounting settings: set it up once, and save hours every month'
+    tags: [New Feature, Announcement]
+    breaking: false
+  - date: '2025-07-08'
+    title: 'Direct Debits: add funds to your Cledara account automatically'
+    tags: [New Feature, Announcement]
+    breaking: false
+  - date: '2025-07-03'
+    title: 'Custom Views: your Applications table, your way'
+    tags: [New Feature, Announcement]
+    breaking: false
+entry_count: 10
+window: 2025-07-03 to 2026-08-27
+maintainers:
+  - FN: Kin Lane
+    email: kinlane@gmail.com

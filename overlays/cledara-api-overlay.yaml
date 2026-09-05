@@ -1,0 +1,111 @@
+overlay: 1.0.0
+info:
+  title: Cledara API — API Evangelist enhancement overlay
+  version: 1.0.0
+x-provenance:
+  generated: '2026-09-05'
+  method: generated
+  source: openapi/cledara-api-openapi.json
+  provider: Cledara
+  providerId: cledara
+  note: >-
+    Non-destructive Overlay 1.0.0 over Cledara's published OpenAPI. It adds the things the
+    original omits and that a generated client or an agent needs: operationIds (the spec
+    declares none, so every generator invents its own method names), a top-level tags block,
+    a declared error response schema matching the envelope observed live, contact and licence
+    metadata, and an external docs link. It changes no path, parameter or response semantics.
+    The original spec is never mutated; the scorer parses the original, so this improves our
+    derived artifacts and any client we generate, not Cledara's content score.
+extends: ./../openapi/cledara-api-openapi.json
+actions:
+  - target: $.info
+    update:
+      contact:
+        name: Cledara Support
+        url: https://help.cledara.com/hc/
+      x-api-docs: https://api-docs.cledara.com/
+      x-spec-source: https://cledara-public.s3.eu-west-2.amazonaws.com/public-api/open-api.json
+      x-path-version: v0
+      x-version-note: >-
+        info.version is "v1" but every path is prefixed /v0/. The path prefix is authoritative.
+  - target: $
+    update:
+      externalDocs:
+        description: Cledara API documentation
+        url: https://api-docs.cledara.com/
+      tags:
+        - name: Applications
+          description: Software subscriptions tracked in the Cledara workspace.
+        - name: Transactions
+          description: Card payments, transfers and account movements, and their invoices.
+  - target: $.paths['/v0/applications'].get
+    update:
+      operationId: listApplications
+      description: >-
+        Returns every application in the caller's workspace as a bare JSON array. There is no
+        pagination and no filtering on this operation — the whole set comes back in one
+        response.
+  - target: $.paths['/v0/transactions'].get
+    update:
+      operationId: listTransactions
+      description: >-
+        Returns a page of transactions, newest data filtered by the optional from/to RFC 3339
+        window and applicationIds[]. Page through with offset, following nextOffset until
+        hasMore is false.
+  - target: $.paths['/v0/transactions/{transactionId}/invoice-url'].get
+    update:
+      operationId: getTransactionInvoiceUrl
+      description: >-
+        Returns a short-lived download URL for the invoice attached to a transaction. The URL
+        is valid for 5 minutes and cannot be stored for later use. Check Transaction.hasInvoice
+        before calling; a transaction with no invoice returns 404.
+  - target: $.components
+    update:
+      schemas:
+        CledaraError:
+          type: object
+          description: >-
+            Error envelope observed on live 4xx responses from https://api.cledara.com. Cledara
+            declares its 4xx responses with a description only and attaches no body schema;
+            this shape is recorded from a probe on 2026-09-05, not from the provider's contract.
+          properties:
+            message:
+              type: string
+              description: Human-readable explanation of the failure.
+            error:
+              type: object
+              properties:
+                method:
+                  type: string
+                url:
+                  type: string
+                status:
+                  type: integer
+                cledaraType:
+                  type: string
+                  description: Discriminator; observed value "cledaraError".
+                errorId:
+                  type: integer
+                  description: >-
+                    Per-occurrence identifier for support correlation. NOT a stable error code —
+                    do not branch on it.
+              required: [method, url, status, cledaraType, errorId]
+          required: [message, error]
+  - target: $.paths['/v0/applications'].get.responses['401']
+    update:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CledaraError'
+  - target: $.paths['/v0/transactions'].get.responses['401']
+    update:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CledaraError'
+  - target: $.paths['/v0/transactions/{transactionId}/invoice-url'].get.responses['401']
+    update:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CledaraError'

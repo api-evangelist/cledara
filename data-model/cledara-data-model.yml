@@ -1,0 +1,176 @@
+generated: '2026-09-05'
+method: derived
+source: openapi/cledara-api-openapi.json (components.schemas + inline response objects)
+provider: Cledara
+providerId: cledara
+api: Cledara API
+summary: >-
+  Three named schemas (Application, Budget, Transaction) plus four inline object types.
+  The graph is shallow and denormalised for reading: a Transaction embeds summary copies
+  of its application, card and owner rather than pointing at them, and there is no endpoint
+  to fetch a Card, a Member or a Team on its own.
+identifiers:
+  style: uuid
+  prefixed: false
+  note: All ids are bare UUIDs with no type prefix; an id string does not say what it identifies.
+entities:
+  - name: Application
+    description: A software subscription tracked in the Cledara workspace.
+    schema: '#/components/schemas/Application'
+    fetched_by: GET /v0/applications
+    key: id (uuid)
+    fields:
+      - {name: id, type: uuid}
+      - {name: name, type: string}
+      - {name: status, type: enum, values: [pending, requested, active, disabled, inactive]}
+      - {name: budget, type: Budget}
+      - {name: createdAt, type: date-time}
+      - {name: owner, type: MemberRef}
+      - {name: nextRenewalDate, type: 'date|null'}
+      - {name: balance, type: 'number|null'}
+      - {name: nextPayment, type: 'NextPayment|null'}
+      - {name: teams, type: 'TeamRef[]'}
+  - name: Budget
+    description: Spending control attached to an application.
+    schema: '#/components/schemas/Budget'
+    fetched_by: embedded in Application
+    key: none (value object)
+    fields:
+      - {name: type, type: enum, values: [soft, fixed, noBudget]}
+      - {name: limit, type: 'number|null'}
+      - {name: currency, type: 'string (ISO 4217)'}
+      - {name: periodicity, type: 'enum|null', values: [week, month, quarter, year, null]}
+  - name: Transaction
+    description: A card payment, transfer or account movement.
+    schema: '#/components/schemas/Transaction'
+    fetched_by: GET /v0/transactions
+    key: id (uuid)
+    fields:
+      - {name: id, type: uuid}
+      - {name: amount, type: number, note: signed; negative is a debit}
+      - {name: currency, type: enum, values: [GBP, EUR, USD]}
+      - {name: localAmount, type: number}
+      - {name: localCurrency, type: string}
+      - {name: accountType, type: enum, values: [application, saasMain, spend, others]}
+      - {name: description, type: string}
+      - {name: comment, type: string}
+      - {name: application, type: ApplicationRef}
+      - {name: authorizedAt, type: date-time}
+      - {name: settledAt, type: date-time}
+      - {name: type, type: enum, values: [cardSend, cardReceive, transferSend, transferReceive, applicationTopUp, applicationFlush, other]}
+      - {name: card, type: 'Card|null'}
+      - {name: hasInvoice, type: boolean}
+      - {name: invoiceDetails, type: 'InvoiceDetails|null'}
+      - {name: accounting, type: 'AccountingEntry[]'}
+  - name: Card
+    description: Virtual or Spend card a transaction was made on. Inline object, no standalone endpoint.
+    schema: inline at Transaction.card
+    key: id (uuid)
+    fields:
+      - {name: id, type: uuid}
+      - {name: name, type: 'string|null', note: only set for Spend Management cards}
+      - {name: type, type: enum, values: [saasMain, saasSupplementary, spend]}
+      - {name: number, type: string, note: last 4 digits only}
+      - {name: owner, type: MemberRef}
+      - {name: status, type: enum, values: [pendingReview, inactive, active, disabled, failed, cancelled, expired]}
+      - {name: tags, type: 'string[]'}
+  - name: InvoiceDetails
+    description: Data the invoice manager extracted from an uploaded invoice; only present once confirmed.
+    schema: inline at Transaction.invoiceDetails
+    key: none (value object)
+    fields:
+      - {name: number, type: 'string|null'}
+      - {name: date, type: 'date|null'}
+      - {name: vat, type: 'object|null', note: '{name, rate} where rate is a fraction 0..1'}
+  - name: AccountingEntry
+    description: One customer-defined accounting field/value pair on a transaction.
+    schema: inline at Transaction.accounting[]
+    key: field.id (uuid)
+    fields:
+      - {name: field.id, type: uuid, note: stable across renames}
+      - {name: field.name, type: string}
+      - {name: value, type: 'string|number|boolean|date'}
+      - {name: name, type: string, note: only populated for record-type values}
+  - name: MemberRef
+    description: Summary reference to a workspace member (application owner, card owner).
+    schema: inline
+    key: id (uuid)
+    fields:
+      - {name: id, type: uuid}
+      - {name: name, type: string}
+  - name: TeamRef
+    description: Summary reference to a team an application is assigned to.
+    schema: inline
+    key: id (uuid)
+    fields:
+      - {name: id, type: uuid}
+      - {name: name, type: string}
+relationships:
+  - from: Application
+    to: Budget
+    kind: has_one
+    via: budget
+    required: true
+    mechanism: '$ref embed'
+  - from: Application
+    to: MemberRef
+    kind: has_one
+    via: owner
+    required: true
+    mechanism: inline embed
+  - from: Application
+    to: TeamRef
+    kind: has_many
+    via: teams
+    required: true
+    mechanism: inline embed
+  - from: Transaction
+    to: Application
+    kind: belongs_to
+    via: application.id
+    required: false
+    mechanism: id-reference + inlined name
+    note: >-
+      The only true join in the model. Transaction.application.id matches Application.id, and
+      GET /v0/transactions accepts applicationIds[] to filter on it.
+  - from: Transaction
+    to: Card
+    kind: has_one
+    via: card
+    required: true
+    nullable: true
+    mechanism: inline embed
+    note: null for non-card transactions (transfers, top-ups, flushes).
+  - from: Card
+    to: MemberRef
+    kind: has_one
+    via: owner
+    required: true
+    mechanism: inline embed
+  - from: Transaction
+    to: InvoiceDetails
+    kind: has_one
+    via: invoiceDetails
+    nullable: true
+    mechanism: inline embed
+  - from: Transaction
+    to: AccountingEntry
+    kind: has_many
+    via: accounting
+    mechanism: inline embed
+  - from: Transaction
+    to: InvoiceURL
+    kind: has_one
+    via: 'GET /v0/transactions/{transactionId}/invoice-url'
+    mechanism: separate operation
+    guard: only when hasInvoice is true; the URL expires after 5 minutes
+observations:
+  - Cards, members and teams appear only as embedded summaries. There is no GET /v0/cards,
+    /v0/members or /v0/teams, so an agent cannot enumerate them — it can only discover the
+    ones that happen to appear on a transaction or application it already fetched.
+  - Application and Transaction are joinable on application id; nothing else in the model is.
+  - components.schemas holds 3 of the 8 entity shapes; the other 5 are inline, so they cannot
+    be $ref'd or reused by a generated client.
+maintainers:
+  - FN: Kin Lane
+    email: kinlane@gmail.com

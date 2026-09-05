@@ -1,0 +1,34 @@
+generated: '2026-09-05'
+method: generated
+source: >-
+  Packaged Agent Skills generated from Cledara's published OpenAPI
+  (openapi/cledara-api-openapi.json, captured verbatim 2026-09-05 from
+  https://cledara-public.s3.eu-west-2.amazonaws.com/public-api/open-api.json). Cledara's spec
+  declares NO operationIds, so every step is grounded in a verified method+path from that spec;
+  the camelCase ids referenced in prose are assigned by overlays/cledara-api-overlay.yaml and
+  are ours, not the provider's. Cross-cutting rules cite ../authentication/, ../errors/,
+  ../conventions/, ../rate-limits/ and ../data-model/.
+provider: Cledara
+providerId: cledara
+note: >-
+  The API is entirely read-only, so none of these skills writes anything. Their rules sections
+  carry that fact explicitly, because the most likely agent error against this provider is
+  assuming a cancel or budget-change endpoint exists.
+skills:
+  - file: cledara-export-the-software-inventory.md
+    name: Export the software subscription inventory
+    api: openapi/cledara-api-openapi.json
+    operations: ['GET /v0/applications']
+  - file: cledara-pull-the-transaction-ledger.md
+    name: Pull the transaction ledger for a period
+    api: openapi/cledara-api-openapi.json
+    operations: ['GET /v0/transactions']
+  - file: cledara-collect-invoices-for-a-period.md
+    name: Collect invoices for a period
+    api: openapi/cledara-api-openapi.json
+    operations: ['GET /v0/transactions', 'GET /v0/transactions/{transactionId}/invoice-url']
+  - file: cledara-build-a-renewal-calendar.md
+    name: Build a renewal and upcoming-payment calendar
+    api: openapi/cledara-api-openapi.json
+    operations: ['GET /v0/applications', 'GET /v0/transactions']
+skill_count: 4

@@ -1,0 +1,65 @@
+generated: '2026-09-05'
+method: derived
+source: openapi/cledara-api-openapi.json + mcp/cledara-mcp.yml (probe of https://data.cledara.com/mcp)
+provider: Cledara
+providerId: cledara
+description: >-
+  Binding between Cledara's MCP tool surface and its REST operations. The headline
+  finding is that there is nothing to bind: Cledara ships two machine surfaces that
+  do not overlap at all. The REST API at api.cledara.com reads YOUR OWN workspace
+  (applications, transactions, invoices) behind a per-user API key. The MCP server at
+  data.cledara.com fronts the PUBLIC aggregated market dataset (rank, share, spend
+  benchmarks across 9,300+ products) behind OAuth with a single mcp:read scope. An
+  agent that connects the MCP server cannot read the caller's own subscriptions, and
+  an agent holding a Cledara API key cannot query the market data. Recorded here so
+  the divergence is data rather than an assumption.
+surfaces:
+  openapi:
+    file: openapi/cledara-api-openapi.json
+    servers:
+      - https://api.cledara.com
+    gated: false
+    note: Spec is public and anonymous; the operations it describes require a Bearer API key.
+  mcp:
+    url: https://data.cledara.com/mcp
+    gated: true
+    note: tools/list returns 401; tool names and inputSchemas require an OAuth access token (scope mcp:read).
+  graphql:
+    present: false
+crosswalk: []
+mcp_only:
+  - tool: unknown
+    reason: >-
+      The MCP tool list could not be enumerated (401) and Cledara publishes no tool
+      catalog. Every tool it exposes is nevertheless MCP-only by construction, because
+      the market dataset it serves has no public REST equivalent — the Data Hub's own
+      programmatic-access link is a mailto to sales.
+rest_only:
+  - operation: getApplications
+    method: GET
+    path: /v0/applications
+    reason: Workspace-scoped application list; no MCP tool fronts the caller's own workspace.
+    note: The spec declares no operationId; the id here is a stable local label, not a provider-published one.
+  - operation: getTransactions
+    method: GET
+    path: /v0/transactions
+    reason: Workspace-scoped transaction list; no MCP tool fronts the caller's own workspace.
+    note: The spec declares no operationId; the id here is a stable local label, not a provider-published one.
+  - operation: getTransactionInvoiceUrl
+    method: GET
+    path: /v0/transactions/{transactionId}/invoice-url
+    reason: Workspace-scoped invoice download link; no MCP tool fronts the caller's own workspace.
+    note: The spec declares no operationId; the id here is a stable local label, not a provider-published one.
+coverage:
+  rest_operations: 3
+  mcp_tools: null
+  bound: 0
+  mcp_only: null
+  rest_only: 3
+  confidence: high
+  note: >-
+    bound=0 is a measured zero, not an unmapped backlog. mcp_tools is null because the
+    live list is auth-gated, and guessing a count would be fabrication.
+maintainers:
+  - FN: Kin Lane
+    email: kinlane@gmail.com

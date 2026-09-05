@@ -1,0 +1,86 @@
+generated: '2026-09-05'
+method: searched
+source: >-
+  openapi/cledara-api-openapi.json, https://api-docs.cledara.com/,
+  https://www.cledara.com/blog/introducing-the-cledara-api,
+  https://announcements.cledara.com/announcements, https://statuspage.cledara.com/ (probed 2026-09-05)
+provider: Cledara
+providerId: cledara
+api: Cledara API
+versioning:
+  scheme: path-prefix
+  current: v0
+  info_version: v1
+  first_released: '2026-08-27'
+  release_evidence: >-
+    "The Cledara API is live 🚀" — https://announcements.cledara.com/announcements, 27 Aug 2026.
+  note: >-
+    The spec's info.version reads "v1" while every path is /v0/ — the two disagree. A /v0/
+    prefix on a surface three weeks old is a deliberate signal that the shape may still move.
+  policy_published: false
+stability:
+  maturity: early
+  breaking_change_notice: none published
+  note: >-
+    Cledara commits to nothing about how long v0 lives or what notice a breaking change gets.
+    "More endpoints are on the way, and the roadmap is being shaped by what customers build
+    and request" (launch post) is the only forward statement.
+deprecation:
+  policy_published: false
+  policy_url: null
+  sunset_header: false
+  deprecation_header: false
+  rfc8594: false
+  deprecated_operations: []
+  note: >-
+    No operation in the spec carries deprecated:true, no Sunset or Deprecation header is
+    documented or observed, and no deprecation policy page exists. HONEST ABSENCE — recorded
+    so it is measured rather than assumed.
+status_page:
+  present: true
+  url: https://statuspage.cledara.com/
+  platform: BetterStack
+  http_status: 200
+  fetched: '2026-09-05'
+  components_monitored:
+    - app.cledara.com
+  history: per-day operational history published (90+ days visible)
+  api_component_covered: false
+  note: >-
+    The status page monitors app.cledara.com. Neither api.cledara.com nor data.cledara.com is
+    listed as a component, so an API consumer cannot tell from this page whether the API
+    itself is up. Machine access is not available either — /api/v2/status.json returns the
+    HTML page, not the Atlassian-style JSON.
+  probes:
+    - url: https://statuspage.cledara.com/
+      status: 200
+      note: real status page content
+    - url: https://statuspage.cledara.com/api/v2/status.json
+      status: 200
+      note: SPA catch-all returning the same HTML shell, not JSON
+sla:
+  published: false
+  note: >-
+    No uptime or support SLA is published. The pricing page names a "dedicated implementation
+    manager" and "dedicated success manager" on the Pro plan but attaches no availability
+    commitment.
+changelog:
+  present: true
+  url: https://announcements.cledara.com/announcements
+  detail: changelog/cledara-changelog.yml
+  api_specific: false
+  note: >-
+    A product announcements feed, not an API changelog. The API's own launch is one entry in
+    it; there is no per-release record of endpoint or schema changes.
+support:
+  help_center: https://help.cledara.com/hc/
+  contact: https://help.cledara.com/hc/en-gb/articles/360020473799-How-do-I-contact-Cledara
+gaps:
+  - No deprecation or breaking-change policy.
+  - No Sunset/Deprecation header support.
+  - The status page does not cover the API hosts.
+  - No machine-readable status endpoint.
+  - No SLA.
+maintainers:
+  - FN: Kin Lane
+    email: kinlane@gmail.com
