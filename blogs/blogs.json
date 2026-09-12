@@ -2,25 +2,28 @@
   "repo": "cledara",
   "feeds": [
     {
-      "source": "https://www.cledara.com/blog/rss.xml",
-      "feed_url": "https://www.cledara.com/blog/rss.xml",
-      "title": "",
-      "saved": 0,
-      "method": "feed",
-      "nature": "vendor-blog",
-      "nature_basis": "path_blog"
-    },
-    {
       "source": "https://www.cledara.com/blog",
       "feed_url": "https://www.cledara.com/blog/rss.xml",
       "title": "",
       "saved": 0,
-      "method": "discovered",
-      "nature": "vendor-blog",
-      "nature_basis": "path_blog"
+      "method": "discovered"
+    },
+    {
+      "source": "https://announcements.cledara.com/announcements",
+      "feed_url": "https://announcements.cledara.com/announcements",
+      "title": "",
+      "saved": 0,
+      "method": "none"
+    },
+    {
+      "source": "https://www.cledara.com/blog/rss.xml",
+      "feed_url": "https://www.cledara.com/blog/rss.xml",
+      "title": "",
+      "saved": 0,
+      "method": "feed"
     }
   ],
-  "fetched": "2026-08-30T22:33:40Z",
+  "fetched": "2026-09-06T19:17:18Z",
   "post_count": 107,
   "feed_nature": "vendor-blog",
   "feed_nature_basis": "path_blog",
