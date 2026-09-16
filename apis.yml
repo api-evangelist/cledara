@@ -50,88 +50,102 @@ description: >-
   integrations. Cledara serves finance, IT, procurement, and operations teams across companies looking
   to consolidate SaaS purchasing and reduce spend leakage.
 apis:
-  - aid: cledara:cledara-api
-    name: Cledara API
-    tags:
-      - Finance
-      - SaaS Management
-      - Subscription Management
-    humanURL: https://api-docs.cledara.com/
-    properties:
-      - type: Documentation
-        url: https://api-docs.cledara.com/
-      - type: APIReference
-        url: https://api-docs.cledara.com/
-      - type: GettingStarted
-        url: https://www.cledara.com/blog/introducing-the-cledara-api
-      - type: OpenAPI
-        url: openapi/cledara-api-openapi.json
-      - type: Overlay
-        url: overlays/cledara-api-overlay.yaml
-      - type: Authentication
-        url: authentication/cledara-authentication.yml
-      - type: Conventions
-        url: conventions/cledara-conventions.yml
-      - type: ErrorCatalog
-        url: errors/cledara-problem-types.yml
-      - type: DataModel
-        url: data-model/cledara-data-model.yml
-      - type: RateLimits
-        url: rate-limits/cledara-rate-limits.yml
-      - type: Lifecycle
-        url: lifecycle/cledara-lifecycle.yml
-      - type: AgentSkill
-        url: skills/_index.yml
-      - type: Website
-        url: https://www.cledara.com/
-    description: >-
-      Cledara's public REST API over your own workspace. As of 2026-09-05 it is three read-only GET operations:
-      list applications (software subscriptions with status, owner, teams, budget, balance, next renewal
-      date and expected next payment), list transactions (card payments, transfers and account movements,
-      filterable by RFC 3339 date window and application id, paged by offset), and fetch a five-minute
-      download URL for a transaction's invoice. Authentication is a Bearer API key self-served in the
-      Cledara app that carries the creating user's permissions; there are no scopes. Rate limited to 120
-      requests per minute per key with X-RateLimit-* headers declared in the contract. There are no write
-      operations, no webhooks, no sandbox and no SDKs. The API is included at no extra cost on every Cledara
-      plan.
-    baseURL: https://api.cledara.com
-    image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/cledara.png
-  - aid: cledara:cledara-saas-market-data-hub
-    name: Cledara SaaS Market Data Hub
-    tags:
-      - Market Data
-      - SaaS Management
-      - MCP
-      - Software Spending
-      - Finance
-    humanURL: https://data.cledara.com/
-    baseURL: https://data.cledara.com
-    description: >-
-      Cledara's public SaaS and AI market dataset — market share, adoption, rank movement and spend benchmarks
-      across 9,300+ software products, built from aggregated anonymized purchasing signals from companies
-      that pay for software through Cledara. It is published as browsable pages, an Atom feed of dated
-      market movements, a natural-language query page, and a remote MCP endpoint at https://data.cledara.com/mcp.
-      The MCP endpoint is OAuth-protected: tools/list returns 401 without a token, and the host serves
-      a complete RFC 8414 authorization-server metadata document with dynamic client registration, PKCE
-      S256 and a single mcp:read scope. Bulk non-MCP programmatic access is sales-gated behind a mailto.
-      This is a different product from the workspace REST API at api.cledara.com and the two share no
-      data and no credential.
-    properties:
-      - type: Website
-        url: https://data.cledara.com/
-      - type: MCPServer
-        url: mcp/cledara-mcp.yml
-      - type: ToolCrosswalk
-        url: mcp/cledara-tool-crosswalk.yml
-      - type: Authentication
-        url: authentication/cledara-authentication.yml
-      - type: OAuthScopes
-        url: scopes/cledara-scopes.yml
-      - type: WellKnown
-        url: well-known/cledara-well-known.yml
-      - type: LLMsTxt
-        url: https://data.cledara.com/llms.txt
-    image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/cledara.png
+- aid: cledara:cledara-saas-market-data-hub
+  name: Cledara SaaS Market Data Hub
+  tags:
+  - Market Data
+  - SaaS Management
+  - MCP
+  - Software Spending
+  - Finance
+  humanURL: https://data.cledara.com/
+  baseURL: https://data.cledara.com
+  description: >-
+    Cledara's public SaaS and AI market dataset — market share, adoption, rank movement and spend benchmarks
+    across 9,300+ software products, built from aggregated anonymized purchasing signals from companies
+    that pay for software through Cledara. It is published as browsable pages, an Atom feed of dated market
+    movements, a natural-language query page, and a remote MCP endpoint at https://data.cledara.com/mcp.
+    The MCP endpoint is OAuth-protected: tools/list returns 401 without a token, and the host serves a
+    complete RFC 8414 authorization-server metadata document with dynamic client registration, PKCE S256
+    and a single mcp:read scope. Bulk non-MCP programmatic access is sales-gated behind a mailto. This
+    is a different product from the workspace REST API at api.cledara.com and the two share no data and
+    no credential.
+  properties:
+  - type: Website
+    url: https://data.cledara.com/
+  - type: MCPServer
+    url: mcp/cledara-mcp.yml
+  - type: ToolCrosswalk
+    url: mcp/cledara-tool-crosswalk.yml
+  - type: Authentication
+    url: authentication/cledara-authentication.yml
+  - type: OAuthScopes
+    url: scopes/cledara-scopes.yml
+  - type: WellKnown
+    url: well-known/cledara-well-known.yml
+  - type: LLMsTxt
+    url: https://data.cledara.com/llms.txt
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/cledara.png
+- aid: cledara:cledara-applications-api
+  name: Cledara Applications API
+  description: The Applications API from Cledara — 1 operation(s) for applications.
+  humanURL: https://api-docs.cledara.com/
+  baseURL: https://api.cledara.com
+  tags:
+  - Applications
+  properties:
+  - type: OpenAPI
+    url: openapi/cledara-applications-api-openapi.yml
+  - type: Documentation
+    url: https://api-docs.cledara.com/
+  - type: APIReference
+    url: https://api-docs.cledara.com/
+  - type: GettingStarted
+    url: https://www.cledara.com/blog/introducing-the-cledara-api
+  - type: Authentication
+    url: authentication/cledara-authentication.yml
+  - type: Conventions
+    url: conventions/cledara-conventions.yml
+  - type: ErrorCatalog
+    url: errors/cledara-problem-types.yml
+  - type: DataModel
+    url: data-model/cledara-data-model.yml
+  - type: RateLimits
+    url: rate-limits/cledara-rate-limits.yml
+  - type: Lifecycle
+    url: lifecycle/cledara-lifecycle.yml
+  - type: Website
+    url: https://www.cledara.com/
+- aid: cledara:cledara-transactions-api
+  name: Cledara Transactions API
+  description: The Transactions API from Cledara — 2 operation(s) for transactions.
+  humanURL: https://api-docs.cledara.com/
+  baseURL: https://api.cledara.com
+  tags:
+  - Transactions
+  properties:
+  - type: OpenAPI
+    url: openapi/cledara-transactions-api-openapi.yml
+  - type: Documentation
+    url: https://api-docs.cledara.com/
+  - type: APIReference
+    url: https://api-docs.cledara.com/
+  - type: GettingStarted
+    url: https://www.cledara.com/blog/introducing-the-cledara-api
+  - type: Authentication
+    url: authentication/cledara-authentication.yml
+  - type: Conventions
+    url: conventions/cledara-conventions.yml
+  - type: ErrorCatalog
+    url: errors/cledara-problem-types.yml
+  - type: DataModel
+    url: data-model/cledara-data-model.yml
+  - type: RateLimits
+    url: rate-limits/cledara-rate-limits.yml
+  - type: Lifecycle
+    url: lifecycle/cledara-lifecycle.yml
+  - type: Website
+    url: https://www.cledara.com/
 common:
   - type: TrustCenter
     url: security/cledara-trust-center.yml
