@@ -92,6 +92,8 @@ apis:
   humanURL: https://api-docs.cledara.com/
   baseURL: https://api.cledara.com
   tags:
+  - Application
+  tags_raw:
   - Applications
   properties:
   - type: OpenAPI
@@ -122,6 +124,8 @@ apis:
   humanURL: https://api-docs.cledara.com/
   baseURL: https://api.cledara.com
   tags:
+  - Transaction
+  tags_raw:
   - Transactions
   properties:
   - type: OpenAPI
