@@ -1,0 +1,24 @@
+{
+  "provider": "cledara",
+  "sources": [
+    "_original/cledara-openapi.json"
+  ],
+  "outputs": [
+    "cledara-applications-api-openapi.yml",
+    "cledara-transactions-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [
+    "sourced from openapi/_original/ (1 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "cledara-openapi.json: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "cledara-openapi.json: declared missing tag: Applications",
+    "cledara-openapi.json: declared missing tag: Transactions",
+    "apis.yml register: already-registered"
+  ],
+  "skipped": [
+    "cledara-applications-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "cledara-transactions-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
+}

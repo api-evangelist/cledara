@@ -1,0 +1,36 @@
+# Front Door AI Index — cledara — 2026-09-17
+# AI vocabulary counted on the provider's root page. Generated; do not edit.
+# `score` is null unless ownership is `own` — see front_door_ai.py.
+front_door_ai:
+  slug: cledara
+  lexicon_version: '1.0'
+  probed_at: '2026-09-17'
+  host: data.cledara.com
+  final_host: data.cledara.com
+  ownership: own
+  owner: cledara
+  shares_host_with: null
+  inherited_from: null
+  verdict: scored
+  score: 48
+  host_score: 48
+  density: 24.63
+  words: 1949
+  tiers:
+    agentic: 4
+    core: 32
+    model: 12
+  ambiguous: 10
+  top_terms:
+    AI: 28
+    automation: 4
+    ChatGPT: 3
+    Claude: 3
+    Gemini: 3
+    agent: 3
+    intelligence: 3
+    OpenAI: 2
+    artificial intelligence: 2
+    prompts: 2
+    AI assistant: 1
+    Anthropic: 1

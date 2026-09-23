@@ -1,0 +1,207 @@
+openapi: 3.2.0
+info:
+  title: Cledara Applications API
+  version: v1
+  description: The Cledara API gives you programmatic access to your Cledara workspace — applications, transactions, and more coming soon.
+servers:
+- url: https://api.cledara.com
+tags:
+- name: Applications
+paths:
+  /v0/applications:
+    get:
+      summary: List applications in the workspace
+      tags:
+      - Applications
+      security:
+      - BearerAuth: []
+      responses:
+        '200':
+          description: Success
+          headers:
+            X-RateLimit-Limit:
+              schema:
+                type: number
+                description: The maximum number of requests per time window
+                example: 1000
+              required: true
+              description: The maximum number of requests per time window
+            X-RateLimit-Remaining:
+              schema:
+                type: number
+                description: The number of requests remaining in the current time window
+                example: 0
+              required: true
+              description: The number of requests remaining in the current time window
+            X-RateLimit-Reset:
+              schema:
+                type: number
+                description: The timestamp of the next reset
+                example: 1719859200
+              required: true
+              description: The timestamp of the next reset
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Application'
+                description: List of applications
+        '401':
+          description: Missing or invalid API key
+        '403':
+          description: Insufficient privileges for this account
+        '429':
+          description: Too many requests
+          headers:
+            Retry-After:
+              schema:
+                type: number
+                description: The number of seconds to wait before the next request
+                example: 10
+              required: true
+              description: The number of seconds to wait before the next request
+            X-RateLimit-Remaining:
+              schema:
+                type: number
+                description: The number of requests remaining in the current time window
+                example: 0
+              required: true
+              description: The number of requests remaining in the current time window
+      operationId: getV0Applications
+      x-operation-id-source: derived
+components:
+  schemas:
+    Budget:
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+          - soft
+          - fixed
+          - noBudget
+          description: Budget type
+        limit:
+          type:
+          - number
+          - 'null'
+          description: Budget limit amount for the given period
+        currency:
+          type: string
+          description: ISO 4217 currency code
+        periodicity:
+          type:
+          - string
+          - 'null'
+          enum:
+          - week
+          - month
+          - quarter
+          - year
+          - null
+          description: Periodicity of the budget
+      required:
+      - type
+      - limit
+      - currency
+      - periodicity
+    Application:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Application unique identifier
+          example: 123e4567-e89b-12d3-a456-426614174000
+        name:
+          type: string
+          description: Application name
+        status:
+          type: string
+          enum:
+          - pending
+          - requested
+          - active
+          - disabled
+          - inactive
+          description: Application status
+        budget:
+          $ref: '#/components/schemas/Budget'
+        createdAt:
+          type: string
+          format: date-time
+          description: ISO 8601 timestamp of application creation
+        owner:
+          type: object
+          properties:
+            id:
+              type: string
+              format: uuid
+              description: Member unique identifier
+            name:
+              type: string
+              description: Member name
+          required:
+          - id
+          - name
+          description: Application owner
+        nextRenewalDate:
+          type:
+          - string
+          - 'null'
+          format: date
+          description: ISO 8601 date of next renewal date
+        balance:
+          type:
+          - number
+          - 'null'
+          description: Application balance
+        nextPayment:
+          type:
+          - object
+          - 'null'
+          properties:
+            date:
+              type: string
+              format: date
+              description: ISO 8601 date of next payment
+            amount:
+              type: number
+              description: Expected amount of the next payment
+          required:
+          - date
+          - amount
+          description: Expected next payment, based on last payment and budget periodicity
+        teams:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                format: uuid
+                description: Team unique identifier
+              name:
+                type: string
+                description: Team name
+            required:
+            - id
+            - name
+          description: Teams the application is assigned to
+      required:
+      - id
+      - name
+      - status
+      - budget
+      - createdAt
+      - owner
+      - nextRenewalDate
+      - balance
+      - nextPayment
+      - teams
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      description: API key issued from the Cledara Web Application
