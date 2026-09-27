@@ -32,6 +32,10 @@ position: Producing
 specificationVersion: '0.23'
 image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/cledara.png
 kind: company
+x-docs-platform: scalar
+x-docs-platform-confidence: medium
+x-docs-platform-checked: 2026-09-24
+x-docs-hosting: github-pages
 tags:
   - Finance
   - SaaS Management
