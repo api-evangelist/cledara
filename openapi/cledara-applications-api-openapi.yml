@@ -72,6 +72,40 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
+    Budget:
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+          - soft
+          - fixed
+          - noBudget
+          description: Budget type
+        limit:
+          type:
+          - number
+          - 'null'
+          description: Budget limit amount for the given period
+        currency:
+          type: string
+          description: ISO 4217 currency code
+        periodicity:
+          type:
+          - string
+          - 'null'
+          enum:
+          - week
+          - month
+          - quarter
+          - year
+          - null
+          description: Periodicity of the budget
+      required:
+      - type
+      - limit
+      - currency
+      - periodicity
     Application:
       type: object
       properties:
@@ -166,40 +200,6 @@ components:
       - balance
       - nextPayment
       - teams
-    Budget:
-      type: object
-      properties:
-        type:
-          type: string
-          enum:
-          - soft
-          - fixed
-          - noBudget
-          description: Budget type
-        limit:
-          type:
-          - number
-          - 'null'
-          description: Budget limit amount for the given period
-        currency:
-          type: string
-          description: ISO 4217 currency code
-        periodicity:
-          type:
-          - string
-          - 'null'
-          enum:
-          - week
-          - month
-          - quarter
-          - year
-          - null
-          description: Periodicity of the budget
-      required:
-      - type
-      - limit
-      - currency
-      - periodicity
   securitySchemes:
     BearerAuth:
       type: http
