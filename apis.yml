@@ -155,6 +155,8 @@ apis:
   - type: Website
     url: https://www.cledara.com/
 common:
+  - type: FinOps
+    url: finops/cledara-finops.yml
   - type: TrustCenter
     url: security/cledara-trust-center.yml
   - type: DomainSecurity
