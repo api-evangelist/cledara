@@ -1,4 +1,4 @@
-# Cledara (cledara)
+# Cledara
 
 <!-- API-EVANGELIST-PROVENANCE:BEGIN -->
 > ### About this repository
@@ -64,39 +64,138 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-Cledara is a SaaS management platform that helps companies manage, control, and optimize software spending. The platform provides visibility into all software subscriptions, virtual payment cards with per-vendor spending limits, approval workflows, vendor renewal tracking, usage analytics, and accounting and ERP integrations.
+Cledara is a SaaS management platform that helps companies manage, control, and optimize software spending. The platform provides visibility into all software subscriptions, virtual payment cards with per-vendor spending limits, approval workflows, vendor renewal tracking, usage analytics, and accounting and ERP integrations. Cledara serves finance, IT, procurement, and operations teams across companies looking to consolidate SaaS purchasing and reduce spend leakage.
 
-**APIs.json:** [apis.yml](https://raw.githubusercontent.com/api-evangelist/cledara/refs/heads/main/apis.yml)
+**Areas:** Finance · SaaS Management · Software Spending · Spend Management · Subscription Management · Virtual Cards · Expense Management · FinOps · MCP · Market Data
 
-## Scope
+## Cledara on APIs.io
 
-- **Type:** Index
-- **x-type:** company
-- **Position:** Consumer
-- **Access:** 3rd-Party
+Everything profiled for Cledara is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/cledara/](https://apis.io/providers/cledara/)** — or go straight to one of the APIs or properties below.
 
-## Tags
+### APIs (3)
 
-Finance, SaaS Management, Software Spending, Spend Management, Subscription Management, Virtual Cards
+- [Cledara SaaS Market Data Hub](https://apis.io/apis/cledara/cledara-saas-market-data-hub/) — Cledara's public SaaS and AI market dataset — market share, adoption, rank movement and spend benchmarks across 9,300+ software products, built from…
+- [Cledara Applications API](https://apis.io/apis/cledara/cledara-applications-api/) — The Applications API from Cledara — 1 operation(s) for applications.
+- [Cledara Transactions API](https://apis.io/apis/cledara/cledara-transactions-api/) — The Transactions API from Cledara — 2 operation(s) for transactions.
 
-## APIs
+### Published properties
 
-### Cledara API
-The Cledara API provides programmatic access to SaaS subscription records, vendors, virtual cards, transactions, approval requests, and spend analytics. The API follows REST conventions, uses JSON payloads, supports OAuth-based authentication, and offers webhook delivery for events such as new subscriptions, card transactions, and approval state changes.
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
 
-- [Documentation](https://docs.cledara.com/)
+#### MCP servers (1)
+
+Model Context Protocol servers that expose the API to agents.
+
+- [Cledara SaaS Market Data Hub MCP Server](https://apis.io/servers/cledara/cledara-saas-market-data-hub-mcp-server/)
+
+#### Overlays (1)
+
+OpenAPI overlays, including conversational phrasing for each operation.
+
+- [Cledara Api Overlay](https://apis.io/overlays/cledara/cledara-api-overlay/)
+
+#### Security (4)
+
+Authentication, trust centre, and vulnerability disclosure.
+
+- [Cledara Authentication](https://apis.io/security/cledara/cledara-authentication/)
+- [Cledara Domain Security](https://apis.io/security/cledara/cledara-domain-security/)
+- [Cledara Trust Center](https://apis.io/security/cledara/cledara-trust-center/)
+- [Cledara Vulnerability Disclosure](https://apis.io/security/cledara/cledara-vulnerability-disclosure/)
+
+#### OAuth scopes (1)
+
+The permissions the API asks for.
+
+- [Cledara Scopes](https://apis.io/scopes/cledara/cledara-scopes/)
+
+#### Plans and pricing (1)
+
+Published plans, tiers and prices.
+
+- [Cledara Plans Pricing](https://apis.io/plans/cledara/cledara-plans-pricing/)
+
+#### Rate limits (1)
+
+Published request limits.
+
+- [Cledara Rate Limits](https://apis.io/rate-limits/cledara/cledara-rate-limits/)
+
+#### FinOps (1)
+
+What the API costs to run, by operation.
+
+- [Cledara Finops](https://apis.io/finops/cledara/cledara-finops/)
+
+## Where to find this API
+
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
+
 - [Website](https://www.cledara.com/)
-
-## Common Properties
-
-- [Website](https://www.cledara.com/)
-- [Documentation](https://docs.cledara.com/)
-- [Help Center](https://help.cledara.com/)
+- [Documentation](https://api-docs.cledara.com/)
+- [Getting started](https://www.cledara.com/blog/introducing-the-cledara-api)
+- [API reference](https://api-docs.cledara.com/)
 - [Pricing](https://www.cledara.com/pricing)
-- [Privacy Policy](https://www.cledara.com/privacy-policy)
-- [Terms of Service](https://www.cledara.com/terms-and-conditions)
+- [Sign up](https://app.cledara.com/signup)
+- [Support](https://help.cledara.com/hc/)
+- [Changelog](https://announcements.cledara.com/announcements)
+- [Blog](https://www.cledara.com/blog)
+- [Terms of service](https://www.cledara.com/terms)
+- [Privacy policy](https://www.cledara.com/privacy-policy)
+- [GitHub](https://github.com/Cledara)
+- [Status](https://statuspage.cledara.com/)
 
-## Maintainers
+## API Evangelist rating
 
-- **FN:** Kin Lane
-- **Email:** kinlane@gmail.com
+**Kin Score 60.0** — strong · rubric 0.25.0 · scored 2026-10-23
+
+| Facet | Score |
+|---|---|
+| Discoverability | 75.0 |
+| Contract quality | 47.8 |
+| Contract governance | 18.2 |
+| Operational transparency | 47.4 |
+| Developer ergonomics | 58.9 |
+| Access clarity | 85.5 |
+
+**Agent readiness 49.3** — agent-ready (gated down from agent-native)
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | yes |
+| Agentic Access | — |
+| Reversibility Documented | na |
+| MCP Server | documented (partial credit) |
+| Auth Clarity | served (partial credit) |
+| Idempotency | na |
+| Error Semantics | derived (partial credit) |
+| OpenAPI Examples | verified |
+| Rate Limit Signal | verified |
+| Event Surface Described | — |
+| Agent Skills | derived (partial credit) |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | na |
+| Delegated Identity | served (partial credit) |
+| Protected Resource Metadata | — |
+| Dynamic Client Registration | yes |
+| Agentic Commerce | — |
+| Pagination Ratio | — |
+| Operation Distinctiveness | distinct |
+
+**Regulatory alignment 42.6** — Securities & Market Data
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/cledara/](https://apis.io/providers/cledara/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for Cledara: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/cledara/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
