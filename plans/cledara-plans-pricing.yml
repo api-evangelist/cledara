@@ -1,0 +1,135 @@
+# Pricing transcribed from the provider's own page — see provenance. Numbers are quoted, not derived.
+generated: '2026-10-28'
+method: searched
+source: https://www.cledara.com/pricing
+sources:
+- https://www.cledara.com/pricing
+provenance:
+  tool: engine/economics/harvest_pricing.py
+  run: 20261028T141238
+  grounding: every price_text was found verbatim in the fetched page text
+audience: business-product
+pricing_basis: tiered-subscription
+delivery:
+  delivery: managed
+  method: page
+  read: '2026-10-28'
+published: true
+note: Monthly/yearly toggle; only the Basic conditional £100/month fee and optional module prices are
+  numeric; Premium and Pro prices require a demo. Cashback of 1% on SaaS/Cloud spend for first year, capped
+  at subscription cost.
+plan_count: 7
+currency: GBP
+plans:
+- name: Basic
+  price_text: Not meeting this condition will result in a charge of £100/month.
+  price: 100
+  currency: GBP
+  period: month
+  included_quota: Manage up to 20 software applications; Typically 25-50 Staff; free if you pay for 10
+    applications with Cledara's virtual cards in your first month
+- name: Premium
+  price_text: Book a Demo
+  period: none
+  included_quota: Manage up to 75 software applications; Typically 51-150 Staff; 1% cashback for the first
+    year; 10 active members
+  overage: Additional active members will be charged at 5GBP per month.
+- name: Pro
+  price_text: Book a Demo
+  period: none
+  included_quota: Typically 151+ Staff; A package designed for you; 50 active members
+  overage: Additional active members will be charged at 5GBP per month.
+- name: Spend Optimization module
+  price_text: £ 200/mo
+  price: 200
+  currency: GBP
+  period: month
+  unit: module
+  included_quota: Software usage and seat utilization insights; benchmarks; Negotiation and Renewal Copilot
+    (AI)
+- name: Spend Optimization module (discounted / annual)
+  price_text: £ 1500/yr
+  price: 1500
+  currency: GBP
+  period: year
+  unit: module
+  included_quota: £ 50 discount when purchased at checkout (listed as £ 150/mo monthly)
+- name: IT Management module
+  price_text: £ 150/mo
+  price: 150
+  currency: GBP
+  period: month
+  unit: module
+  included_quota: Access request workflows; Shadow IT insights; On/offboarding; HR tool integration
+- name: Software Compliance module
+  price_text: £ 1500/yr
+  price: 1500
+  currency: GBP
+  period: year
+  unit: module
+  included_quota: ISO 27001/SOC2 tags; compliance questionnaires; templates (£ 150/mo monthly)
+rate_limit_statements:
+- Manage up to 20 software applications
+- Manage up to 75 software applications
+- Unlimited API access
+x-canonical:
+  generated: '2026-11-01'
+  vocabulary: engine/economics/plans-canonical.yml
+  models:
+  - metered
+  - subscription
+  units: []
+  plans:
+  - name: Basic
+    access: other
+    model: subscription
+    model_how: derived
+    units: []
+    periods:
+    - month
+  - name: Premium
+    access: other
+    model: metered
+    model_how: derived
+    units: []
+    periods:
+    - none
+  - name: Pro
+    access: other
+    model: metered
+    model_how: derived
+    units: []
+    periods:
+    - none
+  - name: Spend Optimization module
+    access: other
+    model: subscription
+    model_how: derived
+    units:
+    - other
+    periods:
+    - month
+  - name: Spend Optimization module (discounted / annual)
+    access: other
+    model: subscription
+    model_how: derived
+    units:
+    - other
+    periods:
+    - year
+  - name: IT Management module
+    access: other
+    model: subscription
+    model_how: derived
+    units:
+    - other
+    periods:
+    - month
+  - name: Software Compliance module
+    access: other
+    model: subscription
+    model_how: derived
+    units:
+    - other
+    periods:
+    - year
